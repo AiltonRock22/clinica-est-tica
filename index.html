@@ -6,10 +6,10 @@
     <title>Estética Estefani Ferreira — Estética Premium & Gestão Integrada</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Inter + Cormorant Garamond para tom sofisticado) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- jsPDF para relatórios reais -->
@@ -124,7 +124,7 @@
         </div>
     </div>
 
-    <!-- 1. LANDING PAGE PRINCIPAL (RESTAURADA E MELHORADA) -->
+    <!-- 1. LANDING PAGE PRINCIPAL -->
     <main id="view-landing" class="pt-20">
         <!-- Secção Hero -->
         <section class="relative py-24 sm:py-32 overflow-hidden border-b border-brandGray/20 bg-gradient-to-b from-charcoal-900 via-charcoal-950 to-charcoal-950">
@@ -155,7 +155,6 @@
                         </div>
                     </div>
                     <div class="lg:col-span-5 flex justify-center relative">
-                        <!-- Imagem Ilustrativa / Card de Promoção Visual -->
                         <div class="w-full max-w-md rounded-2xl border border-brandGray bg-charcoal-900/80 p-6 relative shadow-2xl">
                             <div class="absolute -top-4 -right-4 h-12 w-12 bg-gold-500 text-charcoal-950 rounded-full flex items-center justify-center font-bold font-serif text-lg">5★</div>
                             <span class="text-xs uppercase font-semibold text-gold-400 tracking-wider">Serviço em Destaque</span>
@@ -178,43 +177,8 @@
                 <h2 class="font-serif text-3xl sm:text-5xl text-white">Nossos Serviços Avançados</h2>
                 <p class="text-slate-400 max-w-2xl mx-auto text-sm">Cada tratamento é único, cientificamente projetado para garantir o máximo de eficácia com total segurança.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Serviço 1 -->
-                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
-                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
-                        <i data-lucide="sparkles" class="h-6 w-6"></i>
-                    </div>
-                    <h3 class="font-serif text-2xl text-white">Limpeza de Pele Profunda</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Remoção completa de impurezas, pontos negros e células mortas, seguida de hidratação profunda e máscara calmante.</p>
-                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
-                        <span class="text-gold-300 font-bold">60,00 €</span>
-                        <span class="text-xs text-slate-500">Duração: 60 min</span>
-                    </div>
-                </div>
-                <!-- Serviço 2 -->
-                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
-                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
-                        <i data-lucide="droplets" class="h-6 w-6"></i>
-                    </div>
-                    <h3 class="font-serif text-2xl text-white">Peeling Químico Revitalizante</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Tratamento focado na renovação celular profunda, ideal para redução de manchas, uniformização da pele e brilho.</p>
-                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
-                        <span class="text-gold-300 font-bold">90,00 €</span>
-                        <span class="text-xs text-slate-500">Duração: 45 min</span>
-                    </div>
-                </div>
-                <!-- Serviço 3 -->
-                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
-                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
-                        <i data-lucide="smile" class="h-6 w-6"></i>
-                    </div>
-                    <h3 class="font-serif text-2xl text-white">Massagem Modeladora Premium</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Drenagem linfática localizada e modelação de silhueta de alta performance, utilizando óleos exclusivos.</p>
-                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
-                        <span class="text-gold-300 font-bold">80,00 €</span>
-                        <span class="text-xs text-slate-500">Duração: 75 min</span>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="landing-services-grid">
+                <!-- Injetados dinamicamente via JS do Firestore -->
             </div>
         </section>
 
@@ -228,35 +192,8 @@
                 </div>
 
                 <div class="bg-charcoal-950 border border-brandGray rounded-xl p-6 sm:p-8 space-y-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
-                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="60" onchange="calculateBudget()">
-                            <div>
-                                <span class="block text-sm font-semibold text-white">Limpeza de Pele Profunda</span>
-                                <span class="text-xs text-gold-400">60,00 €</span>
-                            </div>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
-                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="90" onchange="calculateBudget()">
-                            <div>
-                                <span class="block text-sm font-semibold text-white">Peeling Químico</span>
-                                <span class="text-xs text-gold-400">90,00 €</span>
-                            </div>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
-                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="80" onchange="calculateBudget()">
-                            <div>
-                                <span class="block text-sm font-semibold text-white">Massagem Modeladora</span>
-                                <span class="text-xs text-gold-400">80,00 €</span>
-                            </div>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
-                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="45" onchange="calculateBudget()">
-                            <div>
-                                <span class="block text-sm font-semibold text-white">Máscara Facial Rejuvenescedora</span>
-                                <span class="text-xs text-gold-400">45,00 €</span>
-                            </div>
-                        </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="budget-services-list">
+                        <!-- Checkboxes dinâmicos de serviços do Firestore -->
                     </div>
 
                     <div class="p-6 rounded-xl bg-charcoal-900 border border-gold-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -277,7 +214,7 @@
     <main id="view-cliente" class="hidden pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             
-            <!-- Barra Lateral do Cliente (Dados) -->
+            <!-- Barra Lateral do Cliente -->
             <div class="w-full lg:w-1/3 bg-charcoal-900 border border-brandGray rounded-xl p-6 space-y-6">
                 <div class="flex items-center gap-4">
                     <div class="h-14 w-14 rounded-full bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 font-serif font-bold text-xl" id="client-avatar">
@@ -317,9 +254,7 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Tratamento</label>
                             <select id="appt-service" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
-                                <option value="Limpeza de Pele Profunda|60">Limpeza de Pele Profunda — 60,00 €</option>
-                                <option value="Peeling Químico Revitalizante|90">Peeling Químico — 90,00 €</option>
-                                <option value="Massagem Modeladora Premium|80">Massagem Modeladora — 80,00 €</option>
+                                <!-- Opções carregadas dinamicamente via JS -->
                             </select>
                         </div>
                         <div>
@@ -414,11 +349,12 @@
             </div>
         </div>
 
-        <!-- Conteúdo do Dashboard em Abas ou Grelha Inteligente -->
+        <!-- Conteúdo do Dashboard -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <!-- Agendamentos Pendentes & Aprovação (Esquerda - 7 colunas) -->
             <div class="lg:col-span-7 space-y-6">
+                <!-- Tabela de Agendamentos -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
                     <div class="flex justify-between items-center border-b border-brandGray/30 pb-4 mb-4">
                         <h3 class="font-serif text-xl text-white">Histórico e Controlo de Consultas</h3>
@@ -463,6 +399,26 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Formulário para Criar/Adicionar Novos Serviços -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
+                    <h3 class="font-serif text-xl text-white border-b border-brandGray/30 pb-4 mb-4">Adicionar Novo Serviço / Procedimento</h3>
+                    <form id="new-service-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs text-slate-400 mb-1.5">Nome do Procedimento</label>
+                            <input type="text" id="new-service-name" placeholder="Ex: Limpeza de Pele com Máscara de Ouro" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1.5">Preço (€)</label>
+                            <input type="number" id="new-service-price" min="1" placeholder="60.00" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                        </div>
+                        <div class="sm:col-span-3 flex justify-end">
+                            <button type="submit" class="px-6 py-2.5 bg-gold-500 text-black font-bold rounded-lg text-xs uppercase tracking-wider">
+                                Adicionar Procedimento
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!-- Controle de Inventário & Aniversários (Direita - 5 colunas) -->
@@ -476,6 +432,21 @@
                     <div class="space-y-4" id="manager-inventory-list">
                         <!-- Gerado dinamicamente -->
                     </div>
+                </div>
+
+                <!-- Formulário para Criar/Adicionar Novos Produtos -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 space-y-4">
+                    <h3 class="font-serif text-lg text-white border-b border-brandGray/30 pb-2">Cadastrar Novo Produto</h3>
+                    <form id="new-product-form" class="space-y-3">
+                        <input type="text" id="new-product-name" placeholder="Nome do Produto" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="new-product-stock" placeholder="Stock Inicial" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                            <input type="number" id="new-product-price" placeholder="Preço Venda (€)" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-gold-500 text-black font-bold rounded-lg text-xs uppercase tracking-wider">
+                            Salvar no Stock
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Aniversariantes do Mês -->
@@ -505,7 +476,7 @@
         </div>
     </main>
 
-    <!-- 4. MODAL DE AUTENTICAÇÃO (INTERATIVO) -->
+    <!-- 4. MODAL DE AUTENTICAÇÃO -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 modal-blur transition-all">
         <div class="relative w-full max-w-md bg-charcoal-900 rounded-2xl border border-brandGray p-8 space-y-6 shadow-2xl">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:bg-charcoal-800">
@@ -571,12 +542,12 @@
         const db = getFirestore(app);
         const APP_ID = 'esteticistaestefani';
 
-        // Referências
+        // Referências das coleções do Firestore
         const getCol = (name) => collection(db, 'artifacts', APP_ID, 'public', 'data', name);
-        let appState = { appointments: [], inventory: [], sales: [], birthdays: [], currentUser: null };
-        let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null };
+        let appState = { appointments: [], inventory: [], sales: [], birthdays: [], services: [], currentUser: null };
+        let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null, services: null };
 
-        // EXPOR AS FUNÇÕES AO ÂMBITO GLOBAL (window) - Garante o funcionamento de todos os onclick do HTML
+        // EXPOR AS FUNÇÕES AO ÂMBITO GLOBAL (window) - Resolve os erros de ReferenceError nos cliques do HTML
         window.showToast = (title, msg, isError = false) => {
             const toast = document.getElementById('toast-notification');
             document.getElementById('toast-title').innerText = title;
@@ -627,13 +598,11 @@
             window.switchView('landing'); 
         };
 
-        // Controlo de menu mobile
         window.toggleMobileMenu = () => {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         };
 
-        // Calculadora de orçamentos da Landing Page
         window.calculateBudget = () => {
             const checkboxes = document.querySelectorAll('.simulator-checkbox');
             let total = 0;
@@ -645,7 +614,7 @@
             document.getElementById('simulator-total').innerText = total.toFixed(2).replace('.', ',') + " €";
         };
 
-        // Listeners em tempo real
+        // Listeners em tempo real ligados ao Firestore
         function setupRealtimeListeners() {
             if (unsubscribe.appointments) unsubscribe.appointments();
             unsubscribe.appointments = onSnapshot(getCol('appointments'), (snap) => { 
@@ -670,6 +639,14 @@
             unsubscribe.birthdays = onSnapshot(getCol('birthdays'), (snap) => { 
                 appState.birthdays = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
                 if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+
+            if (unsubscribe.services) unsubscribe.services();
+            unsubscribe.services = onSnapshot(getCol('services'), (snap) => { 
+                appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                renderLandingServices();
+                renderBudgetCalculator();
+                updateClientServicesDropdown();
             });
         }
 
@@ -702,10 +679,17 @@
                 // Seed de Produtos iniciais se o banco de dados estiver vazio
                 const invSnap = await getDocs(getCol('inventory'));
                 if (invSnap.empty) {
-                    await addDoc(getCol('inventory'), { id: "p1", name: "Creme Facial Rejuvenescedor", stock: 12, price: 45, minStock: 5 });
-                    await addDoc(getCol('inventory'), { id: "p2", name: "Sérum Ácido Hialurónico", stock: 3, price: 55, minStock: 5 });
-                    await addDoc(getCol('inventory'), { id: "p3", name: "Máscara Purificante", stock: 20, price: 35, minStock: 4 });
-                    await addDoc(getCol('inventory'), { id: "p4", name: "Óleo Essencial Drenagem", stock: 2, price: 28, minStock: 3 });
+                    await addDoc(getCol('inventory'), { name: "Creme Facial Rejuvenescedor", stock: 12, price: 45, minStock: 5 });
+                    await addDoc(getCol('inventory'), { name: "Sérum Ácido Hialurónico", stock: 3, price: 55, minStock: 5 });
+                    await addDoc(getCol('inventory'), { name: "Máscara Purificante Algas", stock: 20, price: 35, minStock: 4 });
+                }
+
+                // Seed de Serviços iniciais se o banco de dados estiver vazio
+                const srvSnap = await getDocs(getCol('services'));
+                if (srvSnap.empty) {
+                    await addDoc(getCol('services'), { name: "Limpeza de Pele Profunda", price: 60, duration: 60, desc: "Remoção completa de impurezas com vapor de ozono." });
+                    await addDoc(getCol('services'), { name: "Peeling Químico Revitalizante", price: 90, duration: 45, desc: "Tratamento para manchas e renovação celular profunda." });
+                    await addDoc(getCol('services'), { name: "Massagem Modeladora Premium", price: 80, duration: 75, desc: "Massagem modeladora de silhueta corporal com óleos ativos." });
                 }
                 
                 // Seed de aniversariantes se vazio
@@ -718,6 +702,13 @@
                 window.switchView(appState.currentUser.role === 'manager' ? 'gerente' : 'cliente');
             } else {
                 appState.currentUser = null;
+                // Ativar escuta básica para carregar serviços mesmo deslogado
+                onSnapshot(getCol('services'), (snap) => {
+                    appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    renderLandingServices();
+                    renderBudgetCalculator();
+                });
+                
                 if (unsubscribe.appointments) unsubscribe.appointments();
                 if (unsubscribe.inventory) unsubscribe.inventory();
                 if (unsubscribe.sales) unsubscribe.sales();
@@ -772,6 +763,47 @@
             renderClientPortal();
         });
 
+        // Adicionar novo Serviço/Procedimento ao Firestore
+        document.getElementById('new-service-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-service-name').value;
+            const price = parseFloat(document.getElementById('new-service-price').value);
+
+            try {
+                await addDoc(getCol('services'), {
+                    name: name,
+                    price: price,
+                    duration: 60,
+                    desc: "Procedimento estético personalizado."
+                });
+                window.showToast("Serviço Criado", `${name} adicionado com sucesso!`);
+                document.getElementById('new-service-form').reset();
+            } catch (err) {
+                window.showToast("Erro", "Não foi possível guardar o novo serviço.", true);
+            }
+        });
+
+        // Adicionar novo Produto ao Firestore
+        document.getElementById('new-product-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-product-name').value;
+            const stock = parseInt(document.getElementById('new-product-stock').value);
+            const price = parseFloat(document.getElementById('new-product-price').value);
+
+            try {
+                await addDoc(getCol('inventory'), {
+                    name: name,
+                    stock: stock,
+                    price: price,
+                    minStock: 5
+                });
+                window.showToast("Produto Guardado", `${name} adicionado ao stock!`);
+                document.getElementById('new-product-form').reset();
+            } catch (err) {
+                window.showToast("Erro", "Não foi possível guardar o produto.", true);
+            }
+        });
+
         // Funções administrativas
         window.confirmAppointment = async (id) => { 
             await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
@@ -817,7 +849,7 @@
             document.getElementById('sale-form').reset();
         });
 
-        // Adicionar Aniversariante
+        // Adicionar Aniversariante ao Firestore
         window.addBirthday = async () => {
             const name = document.getElementById('new-birthday-name').value;
             const day = document.getElementById('new-birthday-day').value;
@@ -834,6 +866,56 @@
         };
 
         window.showAddBirthdayForm = () => document.getElementById('add-birthday-form').classList.toggle('hidden');
+
+        // Renderizadores Dinâmicos baseados no Firestore
+        function renderLandingServices() {
+            const grid = document.getElementById('landing-services-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            appState.services.forEach(s => {
+                grid.innerHTML += `
+                    <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
+                        <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                            <i data-lucide="sparkles" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-white">${s.name}</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">${s.desc || 'Procedimento estético exclusivo.'}</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
+                            <span class="text-gold-300 font-bold">${s.price.toFixed(2)} €</span>
+                            <span class="text-xs text-slate-500">Duração: ${s.duration} min</span>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function renderBudgetCalculator() {
+            const container = document.getElementById('budget-services-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            appState.services.forEach(s => {
+                container.innerHTML += `
+                    <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
+                        <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="${s.price}" onchange="calculateBudget()">
+                        <div>
+                            <span class="block text-sm font-semibold text-white">${s.name}</span>
+                            <span class="text-xs text-gold-400">${s.price.toFixed(2)} €</span>
+                        </div>
+                    </label>
+                `;
+            });
+        }
+
+        function updateClientServicesDropdown() {
+            const dropdown = document.getElementById('appt-service');
+            if (!dropdown) return;
+            dropdown.innerHTML = appState.services.map(s => `
+                <option value="${s.name}|${s.price}">${s.name} — ${s.price.toFixed(2)} €</option>
+            `).join('');
+        }
 
         // Renderizador da área do Cliente
         function renderClientPortal() {
