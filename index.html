@@ -54,11 +54,13 @@
 
     <div id="toast-notification" class="hidden fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-charcoal-800 border border-gold-500/40 text-white shadow-2xl flex items-center gap-3 animate-bounce max-w-sm"><i data-lucide="sparkles" class="text-gold-400 shrink-0"></i><div><span class="font-bold block text-gold-300" id="toast-title">Ação Concluída</span><span id="toast-message">Operação realizada com sucesso.</span></div></div>
 
-    <!-- LANDING PAGE (mesma estrutura original, omitida por brevidade, mas mantenha todo o conteúdo) -->
+    <!-- LANDING PAGE (estrutura resumida, mas mantenha o conteúdo real) -->
     <main id="view-landing" class="pt-20">
-        <!-- Mantenha todo o conteúdo da landing page original aqui -->
         <section class="relative py-24 sm:py-32 overflow-hidden border-b border-brandGray/20 bg-gradient-to-b from-charcoal-900 via-charcoal-950 to-charcoal-950">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"><h1 class="font-serif text-4xl sm:text-6xl text-white">Landing Page</h1><p>Conteúdo original mantido</p></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <h1 class="font-serif text-4xl sm:text-6xl text-white">Estética Avançada</h1>
+                <p class="text-gold-400 mt-4">Bem‑vindo à clínica da Estefani Ferreira</p>
+            </div>
         </section>
     </main>
 
@@ -120,7 +122,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD20OPUFet_4C_s2o-AM5S2ckYYy-S1ga4",
@@ -174,12 +176,12 @@
             const hint = document.getElementById('auth-credentials-hint');
             if (role === 'gerente') {
                 document.getElementById('auth-modal-title').innerText = "Painel Administrativo";
-                hint.innerHTML = "E-mail: estefani@estefaniferreira.com<br>Senha: admin123";
-                document.getElementById('auth-email').value = "estefani@estefaniferreira.com";
+                hint.innerHTML = "E-mail: <strong>estefanifs@hotmail.com.br</strong><br>Senha: <strong>admin123</strong>";
+                document.getElementById('auth-email').value = "estefanifs@hotmail.com.br";
                 document.getElementById('auth-password').value = "admin123";
             } else {
                 document.getElementById('auth-modal-title').innerText = "Área de Cliente";
-                hint.innerHTML = "E-mail: cliente@gmail.com<br>Senha: 123456";
+                hint.innerHTML = "E-mail: <strong>cliente@gmail.com</strong><br>Senha: <strong>123456</strong>";
                 document.getElementById('auth-email').value = "cliente@gmail.com";
                 document.getElementById('auth-password').value = "123456";
             }
@@ -200,7 +202,14 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                appState.currentUser = { uid: user.uid, email: user.email, name: user.email === 'estefani@estefaniferreira.com' ? 'Estefani Ferreira' : (user.displayName || 'Cliente'), role: user.email === 'estefani@estefaniferreira.com' ? 'manager' : 'client' };
+                // Define role baseado no e-mail (corrigido para o novo e-mail da gestora)
+                const isManager = (user.email === 'estefanifs@hotmail.com.br');
+                appState.currentUser = { 
+                    uid: user.uid, 
+                    email: user.email, 
+                    name: isManager ? 'Estefani Ferreira' : (user.displayName || 'Cliente'), 
+                    role: isManager ? 'manager' : 'client' 
+                };
                 setupRealtimeListeners();
                 // Seed inicial se vazio
                 const invSnap = await getDocs(getCol('inventory'));
@@ -309,7 +318,7 @@
             document.getElementById('stat-birthdays').innerText = appState.birthdays.length;
             const table = document.getElementById('manager-appointments-table');
             table.innerHTML = '';
-            appState.appointments.forEach(a => { table.innerHTML += `<tr><td class="p-2">${a.client}</td><td>${a.service}</td><td>${a.date} ${a.time}</td><td>${a.price.toFixed(2)}€</td><td class="text-right">${a.status === 'Confirmado' ? '<span class="text-green-400">Confirmado</span>' : `<button onclick="confirmAppointment('${a.id}')" class="bg-gold-500 text-black px-2 py-1 rounded text-xs">Confirmar</button>`}</td></tr>`; });
+            appState.appointments.forEach(a => { table.innerHTML += `<tr><td class="p-2">${a.client}</td><td class="p-2">${a.service}</td><td class="p-2">${a.date} ${a.time}</td><td class="p-2">${a.price.toFixed(2)}€</td><td class="text-right">${a.status === 'Confirmado' ? '<span class="text-green-400">Confirmado</span>' : `<button onclick="confirmAppointment('${a.id}')" class="bg-gold-500 text-black px-2 py-1 rounded text-xs">Confirmar</button>`}</td></tr>`; });
             const invList = document.getElementById('manager-inventory-list');
             invList.innerHTML = '';
             appState.inventory.forEach(i => { invList.innerHTML += `<div class="p-3 bg-charcoal-950 rounded-lg"><div class="flex justify-between"><span class="font-semibold">${i.name}</span><span>${i.stock} un.</span></div><div class="w-full bg-charcoal-800 h-1.5 rounded-full mt-1"><div class="h-full ${i.stock<=i.minStock?'bg-red-500':'bg-gold-500'}" style="width:${Math.min((i.stock/25)*100,100)}%"></div></div><button onclick="reorderProduct('${i.id}')" class="text-xs text-gold-400 mt-1">Repor +5</button></div>`; });
