@@ -4,7 +4,7 @@
   "description": "Website Corporativo e Sistema de Gestão para Estética Estefani Ferreira",
   "main": "index.html",
   "scripts": {
-    "build": "echo 'No build step required'"
+    "build": "mkdir -p public && cp index.html public/"
   },
   "keywords": [],
   "author": "Estefani Ferreira",
