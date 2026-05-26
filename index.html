@@ -4,126 +4,557 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estética Estefani Ferreira — Estética Premium & Gestão Integrada</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Inter + Cormorant Garamond para tom sofisticado) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- jsPDF para relatórios reais -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Cormorant Garamond', 'serif'] },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    },
                     colors: {
-                        gold: { 50: '#fbfaf4', 100: '#f6f1df', 200: '#eddcb1', 300: '#e1c17b', 400: '#d5a54b', 500: '#c58b2b', 600: '#a77021', 700: '#84531b', 850: '#4c2e0e', 950: '#1f1003' },
-                        brandGray: { DEFAULT: '#515152', hover: '#414142', light: '#717172', dark: '#313132' },
-                        charcoal: { 50: '#f6f6f6', 100: '#e7e7e7', 800: '#1c1c1c', 900: '#121212', 950: '#0a0a0a' }
+                        gold: {
+                            50: '#fbfaf4',
+                            100: '#f6f1df',
+                            200: '#eddcb1',
+                            300: '#e1c17b',
+                            400: '#d5a54b',
+                            500: '#c58b2b', // Dourado Premium
+                            600: '#a77021',
+                            700: '#84531b',
+                            850: '#4c2e0e',
+                            950: '#1f1003'
+                        },
+                        brandGray: {
+                            DEFAULT: '#515152', // Cinza oficial do logotipo
+                            hover: '#414142',
+                            light: '#717172',
+                            dark: '#313132'
+                        },
+                        charcoal: {
+                            50: '#f6f6f6',
+                            100: '#e7e7e7',
+                            800: '#1c1c1c',
+                            900: '#121212',
+                            950: '#0a0a0a'
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        .gold-border-gradient { border-image: linear-gradient(to right, #c58b2b, #515152, #a77021) 1; }
-        .luxury-shadow { box-shadow: 0 10px 30px -10px rgba(197, 139, 43, 0.15); }
-        .modal-blur { backdrop-filter: blur(8px); }
+        .gold-border-gradient {
+            border-image: linear-gradient(to right, #c58b2b, #515152, #a77021) 1;
+        }
+        .luxury-shadow {
+            box-shadow: 0 10px 30px -10px rgba(197, 139, 43, 0.15);
+        }
+        .modal-blur {
+            backdrop-filter: blur(8px);
+        }
     </style>
 </head>
 <body class="bg-charcoal-950 text-slate-100 font-sans antialiased selection:bg-gold-500 selection:text-black">
 
+    <!-- HEADER DE NAVEGAÇÃO -->
     <header class="fixed top-0 left-0 right-0 z-40 bg-charcoal-900/90 border-b border-gold-500/20 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
+                <!-- Logotipo Oficial da Estefani Ferreira -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('landing')">
-                    <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Logo" class="h-12 w-12 object-contain filter drop-shadow-[0_0_8px_rgba(197,139,43,0.3)]">
-                    <div><span class="font-serif font-bold tracking-[0.1em] text-lg text-white block uppercase">Estefani Ferreira</span><span class="text-[9px] uppercase tracking-[0.25em] text-gold-400 block -mt-1">Estética Avançada</span></div>
+                    <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Estética Estefani Ferreira Logo" class="h-12 w-12 object-contain filter drop-shadow-[0_0_8px_rgba(197,139,43,0.3)]">
+                    <div>
+                        <span class="font-serif font-bold tracking-[0.1em] text-lg text-white block uppercase">Estefani Ferreira</span>
+                        <span class="text-[9px] uppercase tracking-[0.25em] text-gold-400 block -mt-1">Estética Avançada</span>
+                    </div>
                 </div>
+
+                <!-- Menu de Navegação Interativo -->
                 <nav class="hidden md:flex items-center gap-8">
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Início</button>
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Serviços</button>
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Produtos</button>
                     <button onclick="openAuthModal('cliente')" class="text-sm font-medium text-gold-300 hover:text-gold-400 flex items-center gap-1"><i data-lucide="user" class="h-4 w-4"></i> Área de Cliente</button>
                 </nav>
+
+                <!-- Botões de Ação do Header -->
                 <div class="flex items-center gap-3">
-                    <button onclick="openAuthModal('gerente')" class="text-xs font-semibold px-4 py-2 border border-brandGray rounded-lg text-slate-300 hover:bg-brandGray/20 hover:text-gold-300 transition-all flex items-center gap-2"><i data-lucide="shield" class="h-4 w-4"></i> Painel Estefani</button>
-                    <button onclick="openAuthModal('cliente')" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-600 via-gold-500 to-brandGray text-charcoal-950 font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-gold-500/10">Agendar Online</button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white transition-colors" aria-label="Abrir Menu">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                    <button onclick="openAuthModal('gerente')" class="hidden sm:flex text-xs font-semibold px-4 py-2 border border-brandGray rounded-lg text-slate-300 hover:bg-brandGray/20 hover:text-gold-300 transition-all items-center gap-2">
+                        <i data-lucide="shield" class="h-4 w-4"></i> Painel Estefani
+                    </button>
+                    <button onclick="openAuthModal('cliente')" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-600 via-gold-500 to-brandGray text-charcoal-950 font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-gold-500/10">
+                        Agendar Online
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Menu de Navegação Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-charcoal-900 border-b border-gold-500/20 px-4 py-6 space-y-4">
+            <button onclick="switchView('landing'); toggleMobileMenu();" class="block w-full text-left text-sm font-medium hover:text-gold-400 transition-colors py-2">Início</button>
+            <button onclick="switchView('landing'); toggleMobileMenu();" class="block w-full text-left text-sm font-medium hover:text-gold-400 transition-colors py-2">Serviços</button>
+            <button onclick="switchView('landing'); toggleMobileMenu();" class="block w-full text-left text-sm font-medium hover:text-gold-400 transition-colors py-2">Produtos</button>
+            <button onclick="openAuthModal('cliente'); toggleMobileMenu();" class="block w-full text-left text-sm font-medium text-gold-300 hover:text-gold-400 py-2 flex items-center gap-1"><i data-lucide="user" class="h-4 w-4"></i> Área de Cliente</button>
+            <button onclick="openAuthModal('gerente'); toggleMobileMenu();" class="block w-full text-left text-sm font-medium text-slate-300 hover:text-gold-300 py-2 flex items-center gap-1"><i data-lucide="shield" class="h-4 w-4"></i> Painel Estefani</button>
+        </div>
     </header>
 
-    <div id="toast-notification" class="hidden fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-charcoal-800 border border-gold-500/40 text-white shadow-2xl flex items-center gap-3 animate-bounce max-w-sm"><i data-lucide="sparkles" class="text-gold-400 shrink-0"></i><div><span class="font-bold block text-gold-300" id="toast-title">Ação Concluída</span><span id="toast-message">Operação realizada com sucesso.</span></div></div>
+    <!-- NOTIFICAÇÃO FLUTUANTE DE FEEDBACK -->
+    <div id="toast-notification" class="hidden fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-charcoal-800 border border-gold-500/40 text-white shadow-2xl flex items-center gap-3 animate-bounce max-w-sm">
+        <i data-lucide="sparkles" class="text-gold-400 shrink-0"></i>
+        <div class="text-sm">
+            <span class="font-bold block text-gold-300" id="toast-title">Ação Concluída</span>
+            <span id="toast-message">Operação realizada com sucesso.</span>
+        </div>
+    </div>
 
-    <!-- LANDING PAGE (estrutura resumida, mas mantenha o conteúdo real) -->
+    <!-- 1. LANDING PAGE PRINCIPAL (RESTAURADA E MELHORADA) -->
     <main id="view-landing" class="pt-20">
+        <!-- Secção Hero -->
         <section class="relative py-24 sm:py-32 overflow-hidden border-b border-brandGray/20 bg-gradient-to-b from-charcoal-900 via-charcoal-950 to-charcoal-950">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                <h1 class="font-serif text-4xl sm:text-6xl text-white">Estética Avançada</h1>
-                <p class="text-gold-400 mt-4">Bem‑vindo à clínica da Estefani Ferreira</p>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-charcoal-900 text-slate-300 border border-brandGray">
+                            <span class="flex h-2 w-2 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-gold-500"></span>
+                            </span>
+                            Agendamentos de Hoje Disponíveis
+                        </span>
+                        <h1 class="font-serif font-bold text-4xl sm:text-6xl text-white leading-tight">
+                            A arte de esculpir a sua <span class="bg-gradient-to-r from-gold-300 via-white to-gold-500 bg-clip-text text-transparent">melhor versão</span>
+                        </h1>
+                        <p class="text-base sm:text-lg text-slate-400 max-w-2xl font-light leading-relaxed">
+                            A esteticista <strong class="text-gold-400 font-medium">Estefani Ferreira</strong> funde tecnologia avançada e técnicas exclusivas de estética facial e corporal para criar tratamentos luxuosos e personalizados. Descubra uma nova experiência de rejuvenescimento e bem-estar.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                            <button onclick="openAuthModal('cliente')" class="inline-flex items-center justify-center px-7 py-4 rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold hover:opacity-90 active:scale-95 transition-all group shadow-lg shadow-gold-500/20">
+                                Marcar uma Consulta
+                                <i data-lucide="calendar" class="ml-2 h-5 w-5 transition-transform group-hover:scale-110"></i>
+                            </button>
+                            <a href="#tratamentos" class="inline-flex items-center justify-center px-7 py-4 rounded-xl border border-brandGray hover:bg-brandGray/10 active:scale-95 transition-all">
+                                Nossos Tratamentos
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center relative">
+                        <!-- Imagem Ilustrativa / Card de Promoção Visual -->
+                        <div class="w-full max-w-md rounded-2xl border border-brandGray bg-charcoal-900/80 p-6 relative shadow-2xl">
+                            <div class="absolute -top-4 -right-4 h-12 w-12 bg-gold-500 text-charcoal-950 rounded-full flex items-center justify-center font-bold font-serif text-lg">5★</div>
+                            <span class="text-xs uppercase font-semibold text-gold-400 tracking-wider">Serviço em Destaque</span>
+                            <h3 class="font-serif text-2xl text-white mt-2 mb-4">Peeling de Diamante com Ácido Hialurónico</h3>
+                            <p class="text-xs text-slate-400 mb-4 leading-relaxed">Renove a derme, reduza linhas de expressão e ganhe luminosidade imediata na primeira sessão com acompanhamento da Estefani Ferreira.</p>
+                            <div class="flex items-center justify-between border-t border-brandGray/30 pt-4">
+                                <span class="text-gold-400 font-bold">75,00 € <span class="text-xs font-light text-slate-400">/ sessão</span></span>
+                                <button onclick="openAuthModal('cliente')" class="text-xs bg-gold-500 text-black px-4 py-2 rounded-lg font-bold">Reservar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tratamentos Populares -->
+        <section id="tratamentos" class="py-24 bg-charcoal-950 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-16">
+                <span class="text-gold-400 text-xs font-semibold uppercase tracking-widest">Procedimentos Premium</span>
+                <h2 class="font-serif text-3xl sm:text-5xl text-white">Nossos Serviços Avançados</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm">Cada tratamento é único, cientificamente projetado para garantir o máximo de eficácia com total segurança.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Serviço 1 -->
+                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
+                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                        <i data-lucide="sparkles" class="h-6 w-6"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl text-white">Limpeza de Pele Profunda</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Remoção completa de impurezas, pontos negros e células mortas, seguida de hidratação profunda e máscara calmante.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
+                        <span class="text-gold-300 font-bold">60,00 €</span>
+                        <span class="text-xs text-slate-500">Duração: 60 min</span>
+                    </div>
+                </div>
+                <!-- Serviço 2 -->
+                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
+                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                        <i data-lucide="droplets" class="h-6 w-6"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl text-white">Peeling Químico Revitalizante</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Tratamento focado na renovação celular profunda, ideal para redução de manchas, uniformização da pele e brilho.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
+                        <span class="text-gold-300 font-bold">90,00 €</span>
+                        <span class="text-xs text-slate-500">Duração: 45 min</span>
+                    </div>
+                </div>
+                <!-- Serviço 3 -->
+                <div class="bg-charcoal-900 border border-brandGray/30 p-8 rounded-xl space-y-4 hover:border-gold-500/30 transition-all group">
+                    <div class="h-12 w-12 rounded-lg bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-black transition-all">
+                        <i data-lucide="smile" class="h-6 w-6"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl text-white">Massagem Modeladora Premium</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Drenagem linfática localizada e modelação de silhueta de alta performance, utilizando óleos exclusivos.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-brandGray/35">
+                        <span class="text-gold-300 font-bold">80,00 €</span>
+                        <span class="text-xs text-slate-500">Duração: 75 min</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simulador Interativo na Landing Page -->
+        <section class="py-20 bg-charcoal-900 border-t border-brandGray/20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                <div class="text-center space-y-3 mb-12">
+                    <span class="text-gold-400 text-xs font-semibold uppercase tracking-widest">Calculadora de Procedimentos</span>
+                    <h2 class="font-serif text-3xl text-white">Estime o seu Tratamento Personalizado</h2>
+                    <p class="text-slate-400 text-sm">Selecione os procedimentos desejados para obter um valor estimado para o seu plano estético.</p>
+                </div>
+
+                <div class="bg-charcoal-950 border border-brandGray rounded-xl p-6 sm:p-8 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
+                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="60" onchange="calculateBudget()">
+                            <div>
+                                <span class="block text-sm font-semibold text-white">Limpeza de Pele Profunda</span>
+                                <span class="text-xs text-gold-400">60,00 €</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
+                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="90" onchange="calculateBudget()">
+                            <div>
+                                <span class="block text-sm font-semibold text-white">Peeling Químico</span>
+                                <span class="text-xs text-gold-400">90,00 €</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
+                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="80" onchange="calculateBudget()">
+                            <div>
+                                <span class="block text-sm font-semibold text-white">Massagem Modeladora</span>
+                                <span class="text-xs text-gold-400">80,00 €</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 bg-charcoal-900 border border-brandGray/30 rounded-xl cursor-pointer select-none hover:border-gold-500/50 transition-all">
+                            <input type="checkbox" class="simulator-checkbox h-5 w-5 rounded text-gold-500 focus:ring-gold-500" value="45" onchange="calculateBudget()">
+                            <div>
+                                <span class="block text-sm font-semibold text-white">Máscara Facial Rejuvenescedora</span>
+                                <span class="text-xs text-gold-400">45,00 €</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-charcoal-900 border border-gold-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase font-semibold block">Total Estimado</span>
+                            <span id="simulator-total" class="font-serif text-3xl font-bold text-gold-400">0,00 €</span>
+                        </div>
+                        <button onclick="openAuthModal('cliente')" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all">
+                            Agendar Consulta Agora
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- PORTAL CLIENTE -->
+    <!-- 2. PORTAL DO CLIENTE (INTERATIVO) -->
     <main id="view-cliente" class="hidden pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-8 items-start">
+            
+            <!-- Barra Lateral do Cliente (Dados) -->
             <div class="w-full lg:w-1/3 bg-charcoal-900 border border-brandGray rounded-xl p-6 space-y-6">
-                <div class="flex items-center gap-4"><div class="h-14 w-14 rounded-full bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 font-serif font-bold text-xl" id="client-avatar">A</div><div><h2 id="client-display-name" class="font-serif text-xl font-bold text-white">Carregando...</h2><span class="text-xs text-gold-400">Cliente Especial</span></div></div>
-                <div class="border-t border-brandGray/30 pt-4 space-y-3"><div class="flex justify-between text-xs"><span class="text-slate-400">E-mail:</span><span class="text-white" id="client-display-email">...</span></div></div>
-                <button onclick="logout()" class="w-full py-2.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 text-xs font-semibold">Sair da Sessão</button>
+                <div class="flex items-center gap-4">
+                    <div class="h-14 w-14 rounded-full bg-gold-950/60 border border-gold-500/30 flex items-center justify-center text-gold-400 font-serif font-bold text-xl" id="client-avatar">
+                        A
+                    </div>
+                    <div>
+                        <h2 id="client-display-name" class="font-serif text-xl font-bold text-white">Carregando...</h2>
+                        <span class="text-xs text-gold-400">Cliente Especial</span>
+                    </div>
+                </div>
+                <div class="border-t border-brandGray/30 pt-4 space-y-3">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-slate-400">E-mail:</span>
+                        <span class="text-white" id="client-display-email">...</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-slate-400">Tipo de Conta:</span>
+                        <span class="text-gold-400 font-semibold">Cliente Registado</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="w-full py-2.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 text-xs font-semibold transition-all">
+                    Sair da Sessão
+                </button>
             </div>
+
+            <!-- Área Principal do Cliente -->
             <div class="w-full lg:w-2/3 space-y-8">
+                <!-- Caixa de Agendamento -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 sm:p-8 space-y-6">
-                    <h3 class="font-serif text-2xl text-white">Marcar Novo Tratamento</h3>
+                    <div class="flex justify-between items-center border-b border-brandGray/30 pb-4">
+                        <h3 class="font-serif text-2xl text-white">Marcar Novo Tratamento</h3>
+                        <i data-lucide="plus-circle" class="text-gold-400 h-6 w-6"></i>
+                    </div>
+
+                    <!-- Formulário de Marcação -->
                     <form id="appointment-form" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div><label class="block text-xs font-semibold text-slate-400 uppercase">Tratamento</label><select id="appt-service" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white"><option value="Limpeza de Pele Profunda|60">Limpeza de Pele Profunda — 60,00 €</option><option value="Peeling Químico Revitalizante|90">Peeling Químico — 90,00 €</option><option value="Massagem Modeladora Premium|80">Massagem Modeladora — 80,00 €</option></select></div>
-                        <div><label class="block text-xs font-semibold text-slate-400 uppercase">Profissional</label><select id="appt-professional" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white"><option value="Esteticista Estefani Ferreira">Esteticista Estefani Ferreira</option></select></div>
-                        <div><label class="block text-xs font-semibold text-slate-400 uppercase">Data</label><input type="date" id="appt-date" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white"></div>
-                        <div><label class="block text-xs font-semibold text-slate-400 uppercase">Hora</label><select id="appt-time" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white"><option value="09:00">09:00</option><option value="10:30">10:30</option><option value="14:00">14:00</option><option value="16:00">16:00</option><option value="17:30">17:30</option></select></div>
-                        <div class="sm:col-span-2"><button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold uppercase">Confirmar Agendamento</button></div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Tratamento</label>
+                            <select id="appt-service" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                                <option value="Limpeza de Pele Profunda|60">Limpeza de Pele Profunda — 60,00 €</option>
+                                <option value="Peeling Químico Revitalizante|90">Peeling Químico — 90,00 €</option>
+                                <option value="Massagem Modeladora Premium|80">Massagem Modeladora — 80,00 €</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Profissional Desejada</label>
+                            <select id="appt-professional" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                                <option value="Esteticista Estefani Ferreira">Esteticista Estefani Ferreira</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Data</label>
+                            <input type="date" id="appt-date" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Hora</label>
+                            <select id="appt-time" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                                <option value="09:00">09:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="14:00">14:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:30">17:30</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold uppercase text-xs tracking-wider hover:opacity-95 transition-all shadow-lg">
+                                Confirmar Agendamento Premium
+                            </button>
+                        </div>
                     </form>
                 </div>
-                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 space-y-4"><h3 class="font-serif text-xl text-white">Os Seus Próximos Tratamentos</h3><div id="client-bookings-list" class="space-y-4"></div></div>
+
+                <!-- Lista de Agendamentos Existentes -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 space-y-4">
+                    <h3 class="font-serif text-xl text-white">Os Seus Próximos Tratamentos</h3>
+                    <div id="client-bookings-list" class="space-y-4">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- DASHBOARD GERENTE -->
+    <!-- 3. DASHBOARD DA ESTETICISTA / GERENTE (COMPLETO) -->
     <main id="view-gerente" class="hidden pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <!-- Boas-vindas & Ações Rápidas -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div class="flex items-center gap-4"><img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" class="h-14 w-14 object-contain"><div><h1 class="font-serif text-3xl text-white">Painel de Controlo</h1><p class="text-gold-400 text-sm">Agendamentos, faturação, stock, aniversariantes</p></div></div>
-            <div class="flex gap-3"><button onclick="generateAnnualPDF()" class="px-4 py-2.5 rounded-lg bg-gold-500 text-charcoal-950 font-bold text-xs flex items-center gap-2"><i data-lucide="file-text"></i> Relatório PDF</button><button onclick="logout()" class="px-4 py-2.5 rounded-lg bg-charcoal-800 border border-brandGray text-gold-300 font-bold text-xs">Terminar</button></div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl"><span class="text-xs text-slate-400">Agendamentos Ativos</span><span class="font-serif text-3xl font-bold text-white block mt-2" id="stat-bookings-count">0</span></div>
-            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl"><span class="text-xs text-slate-400">Faturação Total</span><span class="font-serif text-3xl font-bold text-white block mt-2" id="stat-revenue">0.00 €</span></div>
-            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl"><span class="text-xs text-slate-400">Artigos em Alerta</span><span class="font-serif text-3xl font-bold text-red-400 block mt-2" id="stat-low-stock">0</span></div>
-            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl"><span class="text-xs text-slate-400">Aniversariantes</span><span class="font-serif text-3xl font-bold text-gold-400 block mt-2" id="stat-birthdays">0</span></div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-7 space-y-6">
-                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6"><h3 class="font-serif text-xl text-white mb-4">Agendamentos</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b border-brandGray/30"><th class="p-2 text-left">Cliente</th><th class="p-2 text-left">Serviço</th><th class="p-2 text-left">Data/Hora</th><th class="p-2 text-left">Valor</th><th class="p-2 text-right">Ação</th></tr></thead><tbody id="manager-appointments-table"></tbody></table></div></div>
-                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6"><h3 class="font-serif text-xl text-white mb-4">Registar Venda</h3><form id="sale-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4"><div><label class="text-xs text-slate-400">Item</label><select id="sale-item" class="w-full p-2 bg-charcoal-950 border border-brandGray rounded-lg text-white"></select></div><div><label class="text-xs text-slate-400">Qtd</label><input type="number" id="sale-qty" min="1" value="1" class="w-full p-2 bg-charcoal-950 border border-brandGray rounded-lg text-white"></div><div><button type="submit" class="mt-6 w-full py-2 bg-gold-500 text-black font-bold rounded-lg">Registar</button></div></form></div>
+            <div class="flex items-center gap-4">
+                <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Estefani Logo" class="h-14 w-14 object-contain">
+                <div>
+                    <h1 class="font-serif text-3xl sm:text-4xl text-white font-bold">Painel de Controlo</h1>
+                    <p class="text-gold-400 text-sm">Controlo de agendamentos, faturação, stock e auditoria.</p>
+                </div>
             </div>
+            <div class="flex flex-wrap gap-3">
+                <button onclick="generateAnnualPDF()" class="px-4 py-2.5 rounded-lg bg-gold-500 text-charcoal-950 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-gold-400 transition-all">
+                    <i data-lucide="file-text" class="h-4 w-4"></i> Relatório PDF de Vendas
+                </button>
+                <button onclick="logout()" class="px-4 py-2.5 rounded-lg bg-charcoal-800 border border-brandGray text-gold-300 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-brandGray/40 transition-all">
+                    Terminar Administração
+                </button>
+            </div>
+        </div>
+
+        <!-- 4 Cards de Métricas Principais -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Métrica 1 -->
+            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-gold-500/10"><i data-lucide="calendar" class="h-10 w-10"></i></div>
+                <span class="text-xs text-slate-400 uppercase tracking-wider block">Agendamentos Ativos</span>
+                <span class="font-serif text-3xl font-bold text-white block mt-2" id="stat-bookings-count">0</span>
+                <span class="text-[11px] text-green-400 flex items-center gap-1 mt-1"><i data-lucide="trending-up" class="h-3.5 w-3.5"></i> Em tempo real</span>
+            </div>
+            <!-- Métrica 2 -->
+            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-gold-500/10"><i data-lucide="dollar-sign" class="h-10 w-10"></i></div>
+                <span class="text-xs text-slate-400 uppercase tracking-wider block">Faturação Total</span>
+                <span class="font-serif text-3xl font-bold text-white block mt-2" id="stat-revenue">0.00 €</span>
+                <span class="text-[11px] text-gold-400 font-semibold mt-1 block">Serviços e Vendas</span>
+            </div>
+            <!-- Métrica 3 -->
+            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-gold-500/10"><i data-lucide="package" class="h-10 w-10"></i></div>
+                <span class="text-xs text-slate-400 uppercase tracking-wider block">Artigos em Alerta</span>
+                <span class="font-serif text-3xl font-bold text-red-400 block mt-2" id="stat-low-stock">0</span>
+                <span class="text-[11px] text-slate-400 block mt-1">Repor stock urgente</span>
+            </div>
+            <!-- Métrica 4 -->
+            <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-gold-500/10"><i data-lucide="cake" class="h-10 w-10"></i></div>
+                <span class="text-xs text-slate-400 uppercase tracking-wider block">Aniversariantes</span>
+                <span class="font-serif text-3xl font-bold text-gold-400 block mt-2" id="stat-birthdays">0</span>
+                <span class="text-[11px] text-slate-400 block mt-1">Campanhas ativas</span>
+            </div>
+        </div>
+
+        <!-- Conteúdo do Dashboard em Abas ou Grelha Inteligente -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Agendamentos Pendentes & Aprovação (Esquerda - 7 colunas) -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
+                    <div class="flex justify-between items-center border-b border-brandGray/30 pb-4 mb-4">
+                        <h3 class="font-serif text-xl text-white">Histórico e Controlo de Consultas</h3>
+                        <span class="text-xs bg-charcoal-950 border border-brandGray text-slate-300 px-2.5 py-1 rounded-full">Atualizado em Tempo Real</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-brandGray/30 text-xs uppercase tracking-wider">
+                                    <th class="py-3 px-4">Cliente</th>
+                                    <th class="py-3 px-4">Serviço</th>
+                                    <th class="py-3 px-4">Data/Hora</th>
+                                    <th class="py-3 px-4">Estado</th>
+                                    <th class="py-3 px-4 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manager-appointments-table">
+                                <!-- Preenchido dinamicamente por JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Painel de Registo de Vendas Diretas -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
+                    <h3 class="font-serif text-xl text-white border-b border-brandGray/30 pb-4 mb-4">Registo de Nova Venda (Balcão)</h3>
+                    <form id="sale-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1.5">Artigo / Serviço</label>
+                            <select id="sale-item" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                                <!-- Opções injetadas dinamicamente via JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1.5">Quantidade</label>
+                            <input type="number" id="sale-qty" min="1" value="1" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm outline-none focus:border-gold-500">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full py-2.5 bg-gold-500 text-charcoal-950 font-bold rounded-lg text-xs uppercase tracking-wider">
+                                Registar Venda
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Controle de Inventário & Aniversários (Direita - 5 colunas) -->
             <div class="lg:col-span-5 space-y-6">
-                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6"><div class="flex justify-between"><h3 class="font-serif text-xl text-white">Inventário</h3><button onclick="addSampleProducts()" class="text-xs text-gold-400">+ Produtos demo</button></div><div id="manager-inventory-list" class="space-y-3 mt-4"></div></div>
-                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6"><div class="flex justify-between"><h3 class="font-serif text-xl text-white">Aniversariantes</h3><button onclick="showAddBirthdayForm()" class="text-xs text-gold-400">+ Adicionar</button></div><div id="manager-birthdays-list" class="space-y-3 mt-4"></div><div id="add-birthday-form" class="hidden mt-4 p-3 bg-charcoal-950 rounded-lg"><input type="text" id="new-birthday-name" placeholder="Nome" class="w-full p-2 mb-2 bg-charcoal-800 rounded"><input type="text" id="new-birthday-day" placeholder="Dia (ex: 12 de Outubro)" class="w-full p-2 mb-2 bg-charcoal-800 rounded"><input type="text" id="new-birthday-phone" placeholder="Telefone" class="w-full p-2 mb-2 bg-charcoal-800 rounded"><button onclick="addBirthday()" class="w-full bg-gold-500 text-black p-2 rounded-lg text-sm">Salvar</button></div></div>
+                <!-- Caixa de Stock -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
+                    <div class="flex justify-between items-center border-b border-brandGray/30 pb-4 mb-4">
+                        <h3 class="font-serif text-xl text-white">Inventário de Produtos</h3>
+                        <i data-lucide="package" class="text-gold-400 h-5 w-5"></i>
+                    </div>
+                    <div class="space-y-4" id="manager-inventory-list">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Aniversariantes do Mês -->
+                <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
+                    <div class="flex justify-between items-center border-b border-brandGray/30 pb-4 mb-4">
+                        <h3 class="font-serif text-xl text-white">Aniversários de Clientes</h3>
+                        <i data-lucide="cake" class="text-gold-400 h-5 w-5"></i>
+                    </div>
+                    <div id="manager-birthdays-list" class="space-y-3 mb-4">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                    <div class="flex justify-end border-t border-brandGray/20 pt-4">
+                        <button onclick="showAddBirthdayForm()" class="text-xs text-gold-400 font-semibold flex items-center gap-1 hover:underline">
+                            <i data-lucide="plus" class="h-3.5 w-3.5"></i> Novo Aniversariante
+                        </button>
+                    </div>
+                    <div id="add-birthday-form" class="hidden mt-4 p-4 bg-charcoal-950 border border-brandGray rounded-lg space-y-3">
+                        <input type="text" id="new-birthday-name" placeholder="Nome Completo" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
+                        <input type="text" id="new-birthday-day" placeholder="Dia (ex: 12 de Outubro)" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
+                        <input type="text" id="new-birthday-phone" placeholder="Número de Telefone" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
+                        <button onclick="addBirthday()" class="w-full bg-gold-500 text-black font-bold p-2.5 rounded-lg text-xs uppercase tracking-wider">
+                            Salvar Novo
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL AUTENTICAÇÃO -->
-    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 modal-blur">
-        <div class="relative w-full max-w-md bg-charcoal-900 rounded-2xl border border-brandGray p-8 space-y-6"><button onclick="closeAuthModal()" class="absolute top-4 right-4"><i data-lucide="x" class="h-5 w-5"></i></button><div class="text-center"><img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" class="h-16 w-16 mx-auto"><h3 class="font-serif text-2xl text-white" id="auth-modal-title">Acesso</h3></div><form id="auth-form"><input type="hidden" id="auth-role"><div><label class="text-xs text-slate-400">E-mail</label><input type="email" id="auth-email" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-xl text-white"></div><div><label class="text-xs text-slate-400">Palavra-passe</label><input type="password" id="auth-password" required class="w-full p-3 bg-charcoal-950 border border-brandGray rounded-xl text-white"></div><div class="p-4 rounded-xl bg-gold-950/20 text-xs text-gold-300"><span class="font-bold">Demo:</span><p id="auth-credentials-hint"></p></div><button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold">Entrar</button></form></div>
+    <!-- 4. MODAL DE AUTENTICAÇÃO (INTERATIVO) -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 modal-blur transition-all">
+        <div class="relative w-full max-w-md bg-charcoal-900 rounded-2xl border border-brandGray p-8 space-y-6 shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:bg-charcoal-800">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Estefani Logo" class="h-16 w-16 mx-auto object-contain">
+                <h3 class="font-serif text-2xl text-white" id="auth-modal-title">Acesso Seguro</h3>
+                <p class="text-xs text-slate-400">Insira os seus dados de acesso.</p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form id="auth-form" class="space-y-4">
+                <input type="hidden" id="auth-role" value="cliente">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Endereço de E-mail</label>
+                    <input type="email" id="auth-email" required class="w-full px-4 py-3 bg-charcoal-950 border border-brandGray rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-transparent outline-none transition-all text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Palavra-passe</label>
+                    <input type="password" id="auth-password" required class="w-full px-4 py-3 bg-charcoal-950 border border-brandGray rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-transparent outline-none transition-all text-white text-sm">
+                </div>
+                <div class="p-4 rounded-xl bg-gold-950/20 border border-gold-500/10 text-xs text-gold-300 space-y-1">
+                    <span class="font-bold">Acesso rápido (Demo):</span>
+                    <p id="auth-credentials-hint"></p>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 text-charcoal-950 font-bold text-sm uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all">
+                    Iniciar Sessão Premium
+                </button>
+            </form>
+        </div>
     </div>
 
-    <footer class="bg-charcoal-950 text-slate-500 py-12 border-t border-brandGray/30 text-center"><img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" class="h-14 w-14 mx-auto opacity-60"><p class="text-[10px]">© 2026 Estética Estefani Ferreira</p></footer>
+    <!-- RODAPÉ PREMIUM -->
+    <footer class="bg-charcoal-950 text-slate-500 py-12 border-t border-brandGray/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Estefani Logo" class="h-14 w-14 mx-auto object-contain filter grayscale opacity-60 hover:opacity-100 transition-all">
+            <span class="font-serif text-gold-500 tracking-widest uppercase text-xs block">Estética Estefani Ferreira</span>
+            <p class="text-[10px] text-slate-500">© 2026 Estética Estefani Ferreira. Todos os direitos reservados. Design e Tecnologia Premium.</p>
+        </div>
+    </footer>
 
+    <!-- INJEÇÃO DO SDK OFICIAL DO FIREBASE E PERSISTÊNCIA REAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
 
+        // As tuas credenciais do Firebase injetadas com sucesso!
         const firebaseConfig = {
             apiKey: "AIzaSyD20OPUFet_4C_s2o-AM5S2ckYYy-S1ga4",
             authDomain: "esteticistaestefani.firebaseapp.com",
@@ -133,21 +564,32 @@
             appId: "1:196912865507:web:f89be4219b5f89cb4c25d6",
             measurementId: "G-HL857XX51P"
         };
+
+        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const APP_ID = 'esteticistaestefani';
 
-        // References
+        // Referências
         const getCol = (name) => collection(db, 'artifacts', APP_ID, 'public', 'data', name);
         let appState = { appointments: [], inventory: [], sales: [], birthdays: [], currentUser: null };
         let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null };
 
-        // UI helpers
+        // EXPOR AS FUNÇÕES AO ÂMBITO GLOBAL (window) - Garante o funcionamento de todos os onclick do HTML
         window.showToast = (title, msg, isError = false) => {
             const toast = document.getElementById('toast-notification');
             document.getElementById('toast-title').innerText = title;
             document.getElementById('toast-message').innerText = msg;
+            
+            if (isError) {
+                toast.classList.add('border-red-500');
+                toast.classList.remove('border-gold-500/40');
+            } else {
+                toast.classList.remove('border-red-500');
+                toast.classList.add('border-gold-500/40');
+            }
+            
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 4000);
         };
@@ -160,16 +602,6 @@
             if (view === 'gerente') renderManagerDashboard();
         };
 
-        // Listeners em tempo real
-        function setupRealtimeListeners() {
-            if (unsubscribe.appointments) unsubscribe.appointments();
-            unsubscribe.appointments = onSnapshot(getCol('appointments'), (snap) => { appState.appointments = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (appState.currentUser?.role === 'manager') renderManagerDashboard(); else if (appState.currentUser?.role === 'client') renderClientPortal(); });
-            unsubscribe.inventory = onSnapshot(getCol('inventory'), (snap) => { appState.inventory = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (appState.currentUser?.role === 'manager') renderManagerDashboard(); });
-            unsubscribe.sales = onSnapshot(getCol('sales'), (snap) => { appState.sales = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (appState.currentUser?.role === 'manager') renderManagerDashboard(); });
-            unsubscribe.birthdays = onSnapshot(getCol('birthdays'), (snap) => { appState.birthdays = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (appState.currentUser?.role === 'manager') renderManagerDashboard(); });
-        }
-
-        // Autenticação
         window.openAuthModal = (role) => {
             document.getElementById('auth-role').value = role;
             document.getElementById('auth-modal').classList.remove('hidden');
@@ -186,23 +618,78 @@
                 document.getElementById('auth-password').value = "123456";
             }
         };
-        window.closeAuthModal = () => document.getElementById('auth-modal').classList.add('hidden');
-        window.logout = async () => { await signOut(auth); showToast("Sessão Terminada", "Até breve!"); switchView('landing'); };
 
+        window.closeAuthModal = () => document.getElementById('auth-modal').classList.add('hidden');
+        
+        window.logout = async () => { 
+            await signOut(auth); 
+            window.showToast("Sessão Terminada", "Até breve!"); 
+            window.switchView('landing'); 
+        };
+
+        // Controlo de menu mobile
+        window.toggleMobileMenu = () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        };
+
+        // Calculadora de orçamentos da Landing Page
+        window.calculateBudget = () => {
+            const checkboxes = document.querySelectorAll('.simulator-checkbox');
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parseFloat(cb.value);
+                }
+            });
+            document.getElementById('simulator-total').innerText = total.toFixed(2).replace('.', ',') + " €";
+        };
+
+        // Listeners em tempo real
+        function setupRealtimeListeners() {
+            if (unsubscribe.appointments) unsubscribe.appointments();
+            unsubscribe.appointments = onSnapshot(getCol('appointments'), (snap) => { 
+                appState.appointments = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+                else if (appState.currentUser?.role === 'client') renderClientPortal(); 
+            });
+            
+            if (unsubscribe.inventory) unsubscribe.inventory();
+            unsubscribe.inventory = onSnapshot(getCol('inventory'), (snap) => { 
+                appState.inventory = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+            
+            if (unsubscribe.sales) unsubscribe.sales();
+            unsubscribe.sales = onSnapshot(getCol('sales'), (snap) => { 
+                appState.sales = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+            
+            if (unsubscribe.birthdays) unsubscribe.birthdays();
+            unsubscribe.birthdays = onSnapshot(getCol('birthdays'), (snap) => { 
+                appState.birthdays = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+        }
+
+        // Submissão do Login
         document.getElementById('auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                showToast("Bem-vindo(a)", "Login efetuado com sucesso.");
-                closeAuthModal();
-            } catch (err) { showToast("Erro", "Credenciais inválidas", true); }
+                window.showToast("Bem-vindo(a)", "Login efetuado com sucesso.");
+                window.closeAuthModal();
+            } catch (err) { 
+                window.showToast("Erro", "Credenciais inválidas.", true); 
+            }
         });
 
+        // Verificação contínua do estado da conta
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Define role baseado no e-mail (corrigido para o novo e-mail da gestora)
                 const isManager = (user.email === 'estefanifs@hotmail.com.br');
                 appState.currentUser = { 
                     uid: user.uid, 
@@ -211,124 +698,281 @@
                     role: isManager ? 'manager' : 'client' 
                 };
                 setupRealtimeListeners();
-                // Seed inicial se vazio
+                
+                // Seed de Produtos iniciais se o banco de dados estiver vazio
                 const invSnap = await getDocs(getCol('inventory'));
                 if (invSnap.empty) {
                     await addDoc(getCol('inventory'), { id: "p1", name: "Creme Facial Rejuvenescedor", stock: 12, price: 45, minStock: 5 });
                     await addDoc(getCol('inventory'), { id: "p2", name: "Sérum Ácido Hialurónico", stock: 3, price: 55, minStock: 5 });
                     await addDoc(getCol('inventory'), { id: "p3", name: "Máscara Purificante", stock: 20, price: 35, minStock: 4 });
+                    await addDoc(getCol('inventory'), { id: "p4", name: "Óleo Essencial Drenagem", stock: 2, price: 28, minStock: 3 });
                 }
+                
+                // Seed de aniversariantes se vazio
                 const bdaySnap = await getDocs(getCol('birthdays'));
                 if (bdaySnap.empty) {
                     await addDoc(getCol('birthdays'), { name: "Ana Oliveira", day: "12 de Outubro", phone: "+351 912 345 678" });
                     await addDoc(getCol('birthdays'), { name: "Catarina Silva", day: "15 de Outubro", phone: "+351 934 888 221" });
                 }
-                switchView(appState.currentUser.role === 'manager' ? 'gerente' : 'cliente');
+                
+                window.switchView(appState.currentUser.role === 'manager' ? 'gerente' : 'cliente');
             } else {
                 appState.currentUser = null;
                 if (unsubscribe.appointments) unsubscribe.appointments();
-                switchView('landing');
+                if (unsubscribe.inventory) unsubscribe.inventory();
+                if (unsubscribe.sales) unsubscribe.sales();
+                if (unsubscribe.birthdays) unsubscribe.birthdays();
+                window.switchView('landing');
             }
         });
 
-        // Agendamento com validação de conflito
+        // Agendamento com verificação de colisão e segurança de data passada
         document.getElementById('appointment-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!appState.currentUser) return;
+            
             const [serviceName, priceStr] = document.getElementById('appt-service').value.split('|');
             const price = parseFloat(priceStr);
             const professional = document.getElementById('appt-professional').value;
             const date = document.getElementById('appt-date').value;
             const time = document.getElementById('appt-time').value;
-            if (new Date(date) < new Date().setHours(0,0,0,0)) { showToast("Data inválida", "Não pode agendar no passado.", true); return; }
-            const conflictQuery = query(getCol('appointments'), where('date', '==', date), where('time', '==', time), where('professional', '==', professional));
+            
+            if (new Date(date) < new Date().setHours(0,0,0,0)) { 
+                window.showToast("Data inválida", "Não pode agendar no passado.", true); 
+                return; 
+            }
+            
+            // Query segura para evitar colisões
+            const conflictQuery = query(
+                getCol('appointments'), 
+                where('date', '==', date), 
+                where('time', '==', time), 
+                where('professional', '==', professional)
+            );
+            
             const conflictSnap = await getDocs(conflictQuery);
-            if (!conflictSnap.empty) { showToast("Horário ocupado", "Já existe um agendamento nesse horário.", true); return; }
-            await addDoc(getCol('appointments'), { client: appState.currentUser.name, email: appState.currentUser.email, service: serviceName, date, time, professional, price, status: "Pendente" });
-            showToast("Sucesso", "Agendamento solicitado. Aguarde confirmação.");
+            if (!conflictSnap.empty) { 
+                window.showToast("Horário ocupado", "Já existe um agendamento nesse horário.", true); 
+                return; 
+            }
+            
+            await addDoc(getCol('appointments'), { 
+                client: appState.currentUser.name, 
+                email: appState.currentUser.email, 
+                service: serviceName, 
+                date, 
+                time, 
+                professional, 
+                price, 
+                status: "Pendente" 
+            });
+            
+            window.showToast("Sucesso", "Agendamento solicitado. Aguarde confirmação.");
             document.getElementById('appointment-form').reset();
             renderClientPortal();
         });
 
-        window.confirmAppointment = async (id) => { await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); showToast("Confirmado", "Agendamento aprovado."); };
-        window.reorderProduct = async (id) => { const productRef = doc(getCol('inventory'), id); const product = appState.inventory.find(p => p.id === id); if (product) { await updateDoc(productRef, { stock: product.stock + 5 }); showToast("Stock atualizado", `${product.name}: +5 unidades`); } };
-        window.addSampleProducts = async () => { /* apenas para teste */ };
+        // Funções administrativas
+        window.confirmAppointment = async (id) => { 
+            await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
+            window.showToast("Confirmado", "Agendamento aprovado com sucesso."); 
+        };
+        
+        window.reorderProduct = async (id) => { 
+            const productRef = doc(getCol('inventory'), id); 
+            const product = appState.inventory.find(p => p.id === id); 
+            if (product) { 
+                await updateDoc(productRef, { stock: product.stock + 5 }); 
+                window.showToast("Stock atualizado", `${product.name}: +5 unidades.`); 
+            } 
+        };
 
-        // Venda com atualização de stock
+        // Venda manual com atualização reativa do stock no Firestore
         document.getElementById('sale-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const itemId = document.getElementById('sale-item').value;
             const qty = parseInt(document.getElementById('sale-qty').value);
             const product = appState.inventory.find(p => p.id === itemId);
-            if (!product) { showToast("Erro", "Produto não encontrado.", true); return; }
-            if (product.stock < qty) { showToast("Stock insuficiente", `Apenas ${product.stock} unidades.`, true); return; }
+            
+            if (!product) { 
+                window.showToast("Erro", "Produto não encontrado.", true); 
+                return; 
+            }
+            if (product.stock < qty) { 
+                window.showToast("Stock insuficiente", `Apenas restam ${product.stock} unidades.`, true); 
+                return; 
+            }
+            
             const newStock = product.stock - qty;
             await updateDoc(doc(getCol('inventory'), product.id), { stock: newStock });
-            await addDoc(getCol('sales'), { date: new Date().toISOString().split('T')[0], type: "Produto", name: product.name, qty, total: product.price * qty });
-            showToast("Venda registada", `Total: ${(product.price * qty).toFixed(2)} €`);
+            await addDoc(getCol('sales'), { 
+                date: new Date().toISOString().split('T')[0], 
+                type: "Produto", 
+                name: product.name, 
+                qty, 
+                total: product.price * qty 
+            });
+            
+            window.showToast("Venda registada", `Total: ${(product.price * qty).toFixed(2)} €`);
             document.getElementById('sale-form').reset();
         });
 
-        window.generateAnnualPDF = async () => {
-            const { jsPDF } = window.jspdf;
-            const docPdf = new jsPDF();
-            docPdf.setFillColor(18,18,18); docPdf.rect(0,0,210,45,'F');
-            docPdf.setTextColor(255,255,255); docPdf.setFont('times','bold'); docPdf.setFontSize(22); docPdf.text("ESTETICA ESTEFANI FERREIRA",15,22);
-            docPdf.setFontSize(10); docPdf.setTextColor(197,139,43); docPdf.text("RELATÓRIO GERENCIAL",15,29);
-            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s,a)=>s+a.price,0);
-            const salesTotal = appState.sales.reduce((s,a)=>s+a.total,0);
-            docPdf.setTextColor(0,0,0); docPdf.setFontSize(12); docPdf.text(`Total Faturado: ${(apptTotal+salesTotal).toFixed(2)} €`,15,60);
-            docPdf.text("Serviços Confirmados:",15,80);
-            let y=90;
-            appState.appointments.filter(a=>a.status==='Confirmado').forEach(a=>{ docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`,15,y); y+=8; });
-            docPdf.text("Vendas de Balcão:",15,y+5);
-            y+=15;
-            appState.sales.forEach(s=>{ docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`,15,y); y+=8; });
-            docPdf.save("Relatorio_Estefani.pdf");
-            showToast("PDF gerado", "Relatório descarregado.");
-        };
-
+        // Adicionar Aniversariante
         window.addBirthday = async () => {
             const name = document.getElementById('new-birthday-name').value;
             const day = document.getElementById('new-birthday-day').value;
             const phone = document.getElementById('new-birthday-phone').value;
-            if (name && day) { await addDoc(getCol('birthdays'), { name, day, phone }); showToast("Adicionado", `${name} será lembrado.`); document.getElementById('add-birthday-form').classList.add('hidden'); }
+            
+            if (name && day) { 
+                await addDoc(getCol('birthdays'), { name, day, phone }); 
+                window.showToast("Adicionado", `${name} foi inserido com sucesso.`); 
+                document.getElementById('add-birthday-form').classList.add('hidden');
+                document.getElementById('new-birthday-name').value = '';
+                document.getElementById('new-birthday-day').value = '';
+                document.getElementById('new-birthday-phone').value = '';
+            }
         };
+
         window.showAddBirthdayForm = () => document.getElementById('add-birthday-form').classList.toggle('hidden');
 
+        // Renderizador da área do Cliente
         function renderClientPortal() {
             if (!appState.currentUser) return;
             document.getElementById('client-display-name').innerText = appState.currentUser.name;
             document.getElementById('client-display-email').innerText = appState.currentUser.email;
             document.getElementById('client-avatar').innerText = appState.currentUser.name.charAt(0);
+            
             const myBookings = appState.appointments.filter(a => a.email === appState.currentUser.email);
             const container = document.getElementById('client-bookings-list');
-            container.innerHTML = myBookings.length ? '' : '<p class="text-slate-500">Nenhum agendamento.</p>';
-            myBookings.forEach(b => { container.innerHTML += `<div class="p-4 bg-charcoal-950 rounded-xl flex justify-between"><div><span class="text-gold-400">${b.service}</span><br><span class="text-xs">${b.date} ${b.time}</span></div><span class="px-2 py-1 rounded-full text-xs ${b.status === 'Confirmado' ? 'bg-green-950 text-green-400' : 'bg-yellow-950 text-yellow-400'}">${b.status}</span></div>`; });
+            container.innerHTML = myBookings.length ? '' : '<p class="text-slate-500 text-sm">Nenhum agendamento registado.</p>';
+            
+            myBookings.forEach(b => { 
+                const stateColor = b.status === 'Confirmado' ? 'bg-green-950 text-green-400' : 'bg-yellow-950 text-yellow-400';
+                container.innerHTML += `
+                    <div class="p-4 bg-charcoal-950 border border-brandGray/20 rounded-xl flex justify-between items-center">
+                        <div>
+                            <span class="text-gold-400 font-serif font-semibold text-base">${b.service}</span>
+                            <br>
+                            <span class="text-xs text-slate-400">${b.date} às ${b.time}</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${stateColor}">${b.status}</span>
+                    </div>`; 
+            });
             lucide.createIcons();
         }
 
+        // Renderizador do Dashboard Gerencial
         function renderManagerDashboard() {
             if (!appState.currentUser) return;
+            
             document.getElementById('stat-bookings-count').innerText = appState.appointments.length;
-            const apptTotal = appState.appointments.filter(a=>a.status==='Confirmado').reduce((s,a)=>s+a.price,0);
-            const salesTotal = appState.sales.reduce((s,a)=>s+a.total,0);
-            document.getElementById('stat-revenue').innerText = (apptTotal+salesTotal).toFixed(2)+" €";
-            document.getElementById('stat-low-stock').innerText = appState.inventory.filter(i=>i.stock<=i.minStock).length;
+            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
+            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
+            document.getElementById('stat-revenue').innerText = (apptTotal + salesTotal).toFixed(2) + " €";
+            document.getElementById('stat-low-stock').innerText = appState.inventory.filter(i => i.stock <= i.minStock).length;
             document.getElementById('stat-birthdays').innerText = appState.birthdays.length;
+            
+            // Listagem de Consultas
             const table = document.getElementById('manager-appointments-table');
             table.innerHTML = '';
-            appState.appointments.forEach(a => { table.innerHTML += `<tr><td class="p-2">${a.client}</td><td class="p-2">${a.service}</td><td class="p-2">${a.date} ${a.time}</td><td class="p-2">${a.price.toFixed(2)}€</td><td class="text-right">${a.status === 'Confirmado' ? '<span class="text-green-400">Confirmado</span>' : `<button onclick="confirmAppointment('${a.id}')" class="bg-gold-500 text-black px-2 py-1 rounded text-xs">Confirmar</button>`}</td></tr>`; });
+            appState.appointments.forEach(a => { 
+                table.innerHTML += `
+                    <tr class="border-b border-brandGray/10 hover:bg-charcoal-950/40 text-xs">
+                        <td class="p-3 font-semibold text-white">${a.client}</td>
+                        <td class="p-3">${a.service}</td>
+                        <td class="p-3">${a.date} às ${a.time}</td>
+                        <td class="p-3 font-medium text-gold-400">${a.price.toFixed(2)}€</td>
+                        <td class="text-right p-3">${a.status === 'Confirmado' ? '<span class="text-green-400 font-semibold">Confirmado</span>' : `<button onclick="confirmAppointment('${a.id}')" class="bg-gold-500 text-black font-bold px-3 py-1.5 rounded hover:bg-gold-400 transition-all">Confirmar</button>`}</td>
+                    </tr>`; 
+            });
+            
+            // Listagem de Inventário
             const invList = document.getElementById('manager-inventory-list');
             invList.innerHTML = '';
-            appState.inventory.forEach(i => { invList.innerHTML += `<div class="p-3 bg-charcoal-950 rounded-lg"><div class="flex justify-between"><span class="font-semibold">${i.name}</span><span>${i.stock} un.</span></div><div class="w-full bg-charcoal-800 h-1.5 rounded-full mt-1"><div class="h-full ${i.stock<=i.minStock?'bg-red-500':'bg-gold-500'}" style="width:${Math.min((i.stock/25)*100,100)}%"></div></div><button onclick="reorderProduct('${i.id}')" class="text-xs text-gold-400 mt-1">Repor +5</button></div>`; });
+            appState.inventory.forEach(i => { 
+                const progressColor = i.stock <= i.minStock ? 'bg-red-500' : 'bg-gold-500';
+                invList.innerHTML += `
+                    <div class="p-3 bg-charcoal-950 border border-brandGray/15 rounded-lg space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-semibold text-slate-200">${i.name}</span>
+                            <span class="font-mono text-white font-bold">${i.stock} un.</span>
+                        </div>
+                        <div class="w-full bg-charcoal-800 h-1.5 rounded-full">
+                            <div class="h-full ${progressColor}" style="width:${Math.min((i.stock / 25) * 100, 100)}%"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-[11px]">
+                            <span class="text-slate-400">${i.price.toFixed(2)} €</span>
+                            <button onclick="reorderProduct('${i.id}')" class="text-gold-400 hover:underline">Repor +5</button>
+                        </div>
+                    </div>`; 
+            });
+            
+            // Caixa de Seleção do Ponto de Venda
             const selectItem = document.getElementById('sale-item');
-            if (selectItem) { selectItem.innerHTML = appState.inventory.map(i => `<option value="${i.id}">${i.name} — ${i.price.toFixed(2)} € (stock: ${i.stock})</option>`).join(''); }
+            if (selectItem) { 
+                selectItem.innerHTML = appState.inventory.map(i => `<option value="${i.id}">${i.name} — ${i.price.toFixed(2)} € (stock: ${i.stock})</option>`).join(''); 
+            }
+            
+            // Listagem de Aniversariantes
             const bdayList = document.getElementById('manager-birthdays-list');
             bdayList.innerHTML = '';
-            appState.birthdays.forEach(b => { bdayList.innerHTML += `<div class="p-3 bg-charcoal-950 rounded-lg flex justify-between"><span>${b.name}<br><span class="text-xs text-slate-400">${b.day}</span></span><span class="text-gold-400 text-sm">${b.phone}</span></div>`; });
+            appState.birthdays.forEach(b => { 
+                bdayList.innerHTML += `
+                    <div class="p-3 bg-charcoal-950 border border-brandGray/15 rounded-lg flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-semibold text-white">${b.name}</span>
+                            <br>
+                            <span class="text-[10px] text-slate-400">${b.day}</span>
+                        </div>
+                        <span class="text-gold-400">${b.phone}</span>
+                    </div>`; 
+            });
             lucide.createIcons();
         }
+
+        // Relatório PDF de Vendas
+        window.generateAnnualPDF = async () => {
+            const { jsPDF } = window.jspdf;
+            const docPdf = new jsPDF();
+            
+            docPdf.setFillColor(18, 18, 18); 
+            docPdf.rect(0, 0, 210, 45, 'F');
+            
+            docPdf.setTextColor(255, 255, 255); 
+            docPdf.setFont('times', 'bold'); 
+            docPdf.setFontSize(22); 
+            docPdf.text("ESTETICA ESTEFANI FERREIRA", 15, 22);
+            
+            docPdf.setFontSize(10); 
+            docPdf.setTextColor(197, 139, 43); 
+            docPdf.text("RELATÓRIO FINANCEIRO GERENCIAL", 15, 29);
+            
+            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
+            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
+            
+            docPdf.setTextColor(0, 0, 0); 
+            docPdf.setFontSize(12); 
+            docPdf.text(`Total Faturado: ${(apptTotal + salesTotal).toFixed(2)} €`, 15, 60);
+            
+            docPdf.text("Serviços Confirmados:", 15, 80);
+            let y = 90;
+            appState.appointments.filter(a => a.status === 'Confirmado').forEach(a => { 
+                docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`, 15, y); 
+                y += 8; 
+            });
+            
+            docPdf.text("Vendas de Balcão:", 15, y + 5);
+            y += 15;
+            appState.sales.forEach(s => { 
+                docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`, 15, y); 
+                y += 8; 
+            });
+            
+            docPdf.save("Relatorio_Estefani_Ferreira.pdf");
+            window.showToast("PDF Gerado", "O balanço financeiro anual foi descarregado.");
+        };
+
+        // Tornar funções acessíveis
         window.renderManagerDashboard = renderManagerDashboard;
         window.renderClientPortal = renderClientPortal;
     </script>
