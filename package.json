@@ -1,0 +1,12 @@
+{
+  "name": "estetica-estefani-ferreira",
+  "version": "1.0.0",
+  "description": "Website Corporativo e Sistema de Gestão para Estética Estefani Ferreira",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
+  "keywords": [],
+  "author": "Estefani Ferreira",
+  "license": "ISC"
+}
