@@ -240,7 +240,7 @@
                 </button>
             </div>
 
-            <!-- Área Principal do Cliente -->
+            <!-- Area Principal do Cliente -->
             <div class="w-full lg:w-2/3 space-y-8">
                 <!-- Caixa de Agendamento -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 sm:p-8 space-y-6">
@@ -317,7 +317,7 @@
             </div>
         </div>
 
-        <!-- 4 Cards de Métricas Principais -->
+        <!-- 4 Cards de Métricas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Métrica 1 -->
             <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
@@ -352,7 +352,7 @@
         <!-- Conteúdo do Dashboard -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Agendamentos Pendentes & Aprovação (Esquerda - 7 colunas) -->
+            <!-- Agendamentos Pendentes & Aprovação (Esquerda) -->
             <div class="lg:col-span-7 space-y-6">
                 <!-- Tabela de Agendamentos -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
@@ -421,7 +421,7 @@
                 </div>
             </div>
 
-            <!-- Controle de Inventário & Aniversários (Direita - 5 colunas) -->
+            <!-- Controle de Inventário & Aniversários (Direita) -->
             <div class="lg:col-span-5 space-y-6">
                 <!-- Caixa de Stock -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
@@ -519,13 +519,144 @@
         </div>
     </footer>
 
-    <!-- INJEÇÃO DO SDK OFICIAL DO FIREBASE E PERSISTÊNCIA REAL -->
+    <!-- ETAPA 1: DECLARAÇÃO SÍNCRONA DE FUNÇÕES GLOBAIS DE UI -->
+    <script>
+        window.calculateBudget = () => {
+            const checkboxes = document.querySelectorAll('.simulator-checkbox');
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parseFloat(cb.value);
+                }
+            });
+            const budgetTotal = document.getElementById('simulator-total');
+            if (budgetTotal) {
+                budgetTotal.innerText = total.toFixed(2).replace('.', ',') + " €";
+            }
+        };
+
+        window.toggleMobileMenu = () => {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        };
+
+        window.showToast = (title, msg, isError = false) => {
+            const toast = document.getElementById('toast-notification');
+            const toastTitle = document.getElementById('toast-title');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastTitle || !toastMsg) return;
+
+            toastTitle.innerText = title;
+            toastMsg.innerText = msg;
+            
+            if (isError) {
+                toast.classList.add('border-red-500');
+                toast.classList.remove('border-gold-500/40');
+            } else {
+                toast.classList.remove('border-red-500');
+                toast.classList.add('border-gold-500/40');
+            }
+            
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        };
+
+        window.switchView = (view) => {
+            ['view-landing', 'view-cliente', 'view-gerente'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const viewTarget = document.getElementById(`view-${view}`);
+            if (viewTarget) viewTarget.classList.remove('hidden');
+            window.scrollTo(0, 0);
+            
+            if (view === 'cliente' && window.renderClientPortal) window.renderClientPortal();
+            if (view === 'gerente' && window.renderManagerDashboard) window.renderManagerDashboard();
+        };
+
+        window.openAuthModal = (role) => {
+            const modal = document.getElementById('auth-modal');
+            const roleInput = document.getElementById('auth-role');
+            const title = document.getElementById('auth-modal-title');
+            const hint = document.getElementById('auth-credentials-hint');
+            const emailInput = document.getElementById('auth-email');
+            const passwordInput = document.getElementById('auth-password');
+
+            if (roleInput) roleInput.value = role;
+            if (modal) modal.classList.remove('hidden');
+            
+            if (role === 'gerente') {
+                if (title) title.innerText = "Painel Administrativo";
+                if (hint) hint.innerHTML = "E-mail: <strong>estefanifs@hotmail.com.br</strong><br>Senha: <strong>admin123</strong>";
+                if (emailInput) emailInput.value = "estefanifs@hotmail.com.br";
+                if (passwordInput) passwordInput.value = "admin123";
+            } else {
+                if (title) title.innerText = "Área de Cliente";
+                if (hint) hint.innerHTML = "E-mail: <strong>cliente@gmail.com</strong><br>Senha: <strong>123456</strong>";
+                if (emailInput) emailInput.value = "cliente@gmail.com";
+                if (passwordInput) passwordInput.value = "123456";
+            }
+        };
+
+        window.closeAuthModal = () => {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.showAddBirthdayForm = () => {
+            const form = document.getElementById('add-birthday-form');
+            if (form) form.classList.toggle('hidden');
+        };
+
+        window.logout = async () => {
+            if (window.firebaseLogout) {
+                await window.firebaseLogout();
+            } else {
+                window.showToast("Sincronizando...", "O sistema ainda está a carregar as ligações ao Firebase.", true);
+            }
+        };
+
+        window.confirmAppointment = async (id) => {
+            if (window.firebaseConfirmAppointment) {
+                await window.firebaseConfirmAppointment(id);
+            } else {
+                window.showToast("Aguarde...", "A restabelecer ligação com o banco de dados.", true);
+            }
+        };
+
+        window.reorderProduct = async (id) => {
+            if (window.firebaseReorderProduct) {
+                await window.firebaseReorderProduct(id);
+            } else {
+                window.showToast("Aguarde...", "A carregar módulo de inventário.", true);
+            }
+        };
+
+        window.addBirthday = async () => {
+            if (window.firebaseAddBirthday) {
+                await window.firebaseAddBirthday();
+            } else {
+                window.showToast("Aguarde...", "Módulo de aniversários em sincronia.", true);
+            }
+        };
+
+        window.generateAnnualPDF = async () => {
+            if (window.firebaseGenerateAnnualPDF) {
+                await window.firebaseGenerateAnnualPDF();
+            } else {
+                window.showToast("Aguarde...", "A carregar gerador de relatórios PDF.", true);
+            }
+        };
+    </script>
+
+    <!-- ETAPA 2: CARREGAMENTO DO SDK DO FIREBASE E HIDRATAÇÃO EM TEMPO REAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
 
-        // As tuas credenciais do Firebase injetadas com sucesso!
+        // Credenciais do teu Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyD20OPUFet_4C_s2o-AM5S2ckYYy-S1ga4",
             authDomain: "esteticistaestefani.firebaseapp.com",
@@ -547,71 +678,86 @@
         let appState = { appointments: [], inventory: [], sales: [], birthdays: [], services: [], currentUser: null };
         let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null, services: null };
 
-        // EXPOR AS FUNÇÕES AO ÂMBITO GLOBAL (window) - Resolve os erros de ReferenceError nos cliques do HTML
-        window.showToast = (title, msg, isError = false) => {
-            const toast = document.getElementById('toast-notification');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-message').innerText = msg;
-            
-            if (isError) {
-                toast.classList.add('border-red-500');
-                toast.classList.remove('border-gold-500/40');
-            } else {
-                toast.classList.remove('border-red-500');
-                toast.classList.add('border-gold-500/40');
-            }
-            
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 4000);
-        };
-
-        window.switchView = (view) => {
-            ['view-landing', 'view-cliente', 'view-gerente'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(`view-${view}`).classList.remove('hidden');
-            window.scrollTo(0, 0);
-            if (view === 'cliente') renderClientPortal();
-            if (view === 'gerente') renderManagerDashboard();
-        };
-
-        window.openAuthModal = (role) => {
-            document.getElementById('auth-role').value = role;
-            document.getElementById('auth-modal').classList.remove('hidden');
-            const hint = document.getElementById('auth-credentials-hint');
-            if (role === 'gerente') {
-                document.getElementById('auth-modal-title').innerText = "Painel Administrativo";
-                hint.innerHTML = "E-mail: <strong>estefanifs@hotmail.com.br</strong><br>Senha: <strong>admin123</strong>";
-                document.getElementById('auth-email').value = "estefanifs@hotmail.com.br";
-                document.getElementById('auth-password').value = "admin123";
-            } else {
-                document.getElementById('auth-modal-title').innerText = "Área de Cliente";
-                hint.innerHTML = "E-mail: <strong>cliente@gmail.com</strong><br>Senha: <strong>123456</strong>";
-                document.getElementById('auth-email').value = "cliente@gmail.com";
-                document.getElementById('auth-password').value = "123456";
-            }
-        };
-
-        window.closeAuthModal = () => document.getElementById('auth-modal').classList.add('hidden');
-        
-        window.logout = async () => { 
+        // Subscrever e hidratar as delegações síncronas
+        window.firebaseLogout = async () => { 
             await signOut(auth); 
             window.showToast("Sessão Terminada", "Até breve!"); 
             window.switchView('landing'); 
         };
 
-        window.toggleMobileMenu = () => {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        window.firebaseConfirmAppointment = async (id) => { 
+            try {
+                await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
+                window.showToast("Confirmado", "Agendamento aprovado com sucesso."); 
+            } catch (err) {
+                console.error(err);
+                window.showToast("Erro", "Falha ao aprovar o agendamento.", true);
+            }
+        };
+        
+        window.firebaseReorderProduct = async (id) => { 
+            const productRef = doc(getCol('inventory'), id); 
+            const product = appState.inventory.find(p => p.id === id); 
+            if (product) { 
+                await updateDoc(productRef, { stock: product.stock + 5 }); 
+                window.showToast("Stock atualizado", `${product.name}: +5 unidades.`); 
+            } 
         };
 
-        window.calculateBudget = () => {
-            const checkboxes = document.querySelectorAll('.simulator-checkbox');
-            let total = 0;
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    total += parseFloat(cb.value);
-                }
+        window.firebaseAddBirthday = async () => {
+            const name = document.getElementById('new-birthday-name').value;
+            const day = document.getElementById('new-birthday-day').value;
+            const phone = document.getElementById('new-birthday-phone').value;
+            
+            if (name && day) { 
+                await addDoc(getCol('birthdays'), { name, day, phone }); 
+                window.showToast("Adicionado", `${name} foi inserido com sucesso.`); 
+                document.getElementById('add-birthday-form').classList.add('hidden');
+                document.getElementById('new-birthday-name').value = '';
+                document.getElementById('new-birthday-day').value = '';
+                document.getElementById('new-birthday-phone').value = '';
+            }
+        };
+
+        window.firebaseGenerateAnnualPDF = async () => {
+            const { jsPDF } = window.jspdf;
+            const docPdf = new jsPDF();
+            
+            docPdf.setFillColor(18, 18, 18); 
+            docPdf.rect(0, 0, 210, 45, 'F');
+            
+            docPdf.setTextColor(255, 255, 255); 
+            docPdf.setFont('times', 'bold'); 
+            docPdf.setFontSize(22); 
+            docPdf.text("ESTETICA ESTEFANI FERREIRA", 15, 22);
+            
+            docPdf.setFontSize(10); 
+            docPdf.setTextColor(197, 139, 43); 
+            docPdf.text("RELATÓRIO FINANCEIRO GERENCIAL", 15, 29);
+            
+            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
+            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
+            
+            docPdf.setTextColor(0, 0, 0); 
+            docPdf.setFontSize(12); 
+            docPdf.text(`Total Faturado: ${(apptTotal + salesTotal).toFixed(2)} €`, 15, 60);
+            
+            docPdf.text("Serviços Confirmados:", 15, 80);
+            let y = 90;
+            appState.appointments.filter(a => a.status === 'Confirmado').forEach(a => { 
+                docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`, 15, y); 
+                y += 8; 
             });
-            document.getElementById('simulator-total').innerText = total.toFixed(2).replace('.', ',') + " €";
+            
+            docPdf.text("Vendas de Balcão:", 15, y + 5);
+            y += 15;
+            appState.sales.forEach(s => { 
+                docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`, 15, y); 
+                y += 8; 
+            });
+            
+            docPdf.save("Relatorio_Estefani_Ferreira.pdf");
+            window.showToast("PDF Gerado", "O balanço financeiro anual foi descarregado.");
         };
 
         // Listeners em tempo real ligados ao Firestore
@@ -804,21 +950,6 @@
             }
         });
 
-        // Funções administrativas
-        window.confirmAppointment = async (id) => { 
-            await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
-            window.showToast("Confirmado", "Agendamento aprovado com sucesso."); 
-        };
-        
-        window.reorderProduct = async (id) => { 
-            const productRef = doc(getCol('inventory'), id); 
-            const product = appState.inventory.find(p => p.id === id); 
-            if (product) { 
-                await updateDoc(productRef, { stock: product.stock + 5 }); 
-                window.showToast("Stock atualizado", `${product.name}: +5 unidades.`); 
-            } 
-        };
-
         // Venda manual com atualização reativa do stock no Firestore
         document.getElementById('sale-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -848,24 +979,6 @@
             window.showToast("Venda registada", `Total: ${(product.price * qty).toFixed(2)} €`);
             document.getElementById('sale-form').reset();
         });
-
-        // Adicionar Aniversariante ao Firestore
-        window.addBirthday = async () => {
-            const name = document.getElementById('new-birthday-name').value;
-            const day = document.getElementById('new-birthday-day').value;
-            const phone = document.getElementById('new-birthday-phone').value;
-            
-            if (name && day) { 
-                await addDoc(getCol('birthdays'), { name, day, phone }); 
-                window.showToast("Adicionado", `${name} foi inserido com sucesso.`); 
-                document.getElementById('add-birthday-form').classList.add('hidden');
-                document.getElementById('new-birthday-name').value = '';
-                document.getElementById('new-birthday-day').value = '';
-                document.getElementById('new-birthday-phone').value = '';
-            }
-        };
-
-        window.showAddBirthdayForm = () => document.getElementById('add-birthday-form').classList.toggle('hidden');
 
         // Renderizadores Dinâmicos baseados no Firestore
         function renderLandingServices() {
@@ -1012,49 +1125,7 @@
             lucide.createIcons();
         }
 
-        // Relatório PDF de Vendas
-        window.generateAnnualPDF = async () => {
-            const { jsPDF } = window.jspdf;
-            const docPdf = new jsPDF();
-            
-            docPdf.setFillColor(18, 18, 18); 
-            docPdf.rect(0, 0, 210, 45, 'F');
-            
-            docPdf.setTextColor(255, 255, 255); 
-            docPdf.setFont('times', 'bold'); 
-            docPdf.setFontSize(22); 
-            docPdf.text("ESTETICA ESTEFANI FERREIRA", 15, 22);
-            
-            docPdf.setFontSize(10); 
-            docPdf.setTextColor(197, 139, 43); 
-            docPdf.text("RELATÓRIO FINANCEIRO GERENCIAL", 15, 29);
-            
-            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
-            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
-            
-            docPdf.setTextColor(0, 0, 0); 
-            docPdf.setFontSize(12); 
-            docPdf.text(`Total Faturado: ${(apptTotal + salesTotal).toFixed(2)} €`, 15, 60);
-            
-            docPdf.text("Serviços Confirmados:", 15, 80);
-            let y = 90;
-            appState.appointments.filter(a => a.status === 'Confirmado').forEach(a => { 
-                docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`, 15, y); 
-                y += 8; 
-            });
-            
-            docPdf.text("Vendas de Balcão:", 15, y + 5);
-            y += 15;
-            appState.sales.forEach(s => { 
-                docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`, 15, y); 
-                y += 8; 
-            });
-            
-            docPdf.save("Relatorio_Estefani_Ferreira.pdf");
-            window.showToast("PDF Gerado", "O balanço financeiro anual foi descarregado.");
-        };
-
-        // Tornar funções acessíveis
+        // Tornar renderizadores visíveis globalmente
         window.renderManagerDashboard = renderManagerDashboard;
         window.renderClientPortal = renderClientPortal;
     </script>
