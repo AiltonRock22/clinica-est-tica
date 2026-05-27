@@ -87,7 +87,7 @@
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Início</button>
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Serviços</button>
                     <button onclick="switchView('landing')" class="text-sm font-medium hover:text-gold-400 transition-colors">Produtos</button>
-                    <button onclick="openAuthModal('cliente')" class="text-sm font-medium text-gold-300 hover:text-gold-400 flex items-center gap-1"><i data-lucide="user" class="h-4 w-4"></i> Área de Cliente</button>
+                    <button id="header-client-area-btn" onclick="openAuthModal('cliente')" class="text-sm font-medium text-gold-300 hover:text-gold-400 flex items-center gap-1"><i data-lucide="user" class="h-4 w-4"></i> Área de Cliente</button>
                 </nav>
 
                 <!-- Botões de Ação do Header -->
@@ -95,12 +95,16 @@
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white transition-colors" aria-label="Abrir Menu">
                         <i data-lucide="menu" class="h-6 w-6"></i>
                     </button>
-                    <button onclick="openAuthModal('gerente')" class="hidden sm:flex text-xs font-semibold px-4 py-2 border border-brandGray rounded-lg text-slate-300 hover:bg-brandGray/20 hover:text-gold-300 transition-all items-center gap-2">
+                    <button id="header-manager-panel-btn" onclick="openAuthModal('gerente')" class="hidden sm:flex text-xs font-semibold px-4 py-2 border border-brandGray rounded-lg text-slate-300 hover:bg-brandGray/20 hover:text-gold-300 transition-all items-center gap-2">
                         <i data-lucide="shield" class="h-4 w-4"></i> Painel Estefani
                     </button>
-                    <button onclick="openAuthModal('cliente')" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-600 via-gold-500 to-brandGray text-charcoal-950 font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-gold-500/10">
+                    <button id="header-schedule-online-btn" onclick="openAuthModal('cliente')" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-600 via-gold-500 to-brandGray text-charcoal-950 font-bold text-xs uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-gold-500/10">
                         Agendar Online
                     </button>
+                    <div id="user-info-display" class="hidden items-center gap-2">
+                        <span id="logged-in-username" class="text-sm font-medium text-white"></span>
+                        <button onclick="logout()" class="text-sm font-medium text-red-400 hover:text-red-300 transition-colors">Sair</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -221,7 +225,7 @@
                         A
                     </div>
                     <div>
-                        <h2 id="client-display-name" class="font-serif text-xl font-bold text-white">Carregando...</h2>
+                        <h2 id="client-display-name" class="font-serif text-xl text-white">Nome do Cliente</h2>
                         <span class="text-xs text-gold-400">Cliente Especial</span>
                     </div>
                 </div>
@@ -240,7 +244,7 @@
                 </button>
             </div>
 
-            <!-- Area Principal do Cliente -->
+            <!-- Área Principal do Cliente -->
             <div class="w-full lg:w-2/3 space-y-8">
                 <!-- Caixa de Agendamento -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6 sm:p-8 space-y-6">
@@ -317,7 +321,7 @@
             </div>
         </div>
 
-        <!-- 4 Cards de Métricas -->
+        <!-- 4 Cards de Métricas Principais -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Métrica 1 -->
             <div class="bg-charcoal-900 border border-brandGray p-6 rounded-xl relative overflow-hidden">
@@ -352,7 +356,7 @@
         <!-- Conteúdo do Dashboard -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Agendamentos Pendentes & Aprovação (Esquerda) -->
+            <!-- Agendamentos Pendentes & Aprovação (Esquerda - 7 colunas) -->
             <div class="lg:col-span-7 space-y-6">
                 <!-- Tabela de Agendamentos -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
@@ -421,7 +425,7 @@
                 </div>
             </div>
 
-            <!-- Controle de Inventário & Aniversários (Direita) -->
+            <!-- Controle de Inventário & Aniversários (Direita - 5 colunas) -->
             <div class="lg:col-span-5 space-y-6">
                 <!-- Caixa de Stock -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
@@ -440,64 +444,49 @@
                     <form id="new-product-form" class="space-y-3">
                         <input type="text" id="new-product-name" placeholder="Nome do Produto" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="new-product-stock" placeholder="Stock Inicial" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
-                            <input type="number" id="new-product-price" placeholder="Preço Venda (€)" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                            <input type="number" id="new-product-stock" placeholder="Stock" min="0" value="1" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                            <input type="number" id="new-product-price" placeholder="Preço (€)" min="0" step="0.01" required class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
                         </div>
-                        <button type="submit" class="w-full py-2 bg-gold-500 text-black font-bold rounded-lg text-xs uppercase tracking-wider">
-                            Salvar no Stock
+                        <button type="submit" class="w-full py-2.5 bg-gold-500 text-black font-bold rounded-lg text-xs uppercase tracking-wider">
+                            Adicionar Produto
                         </button>
                     </form>
                 </div>
 
-                <!-- Aniversariantes do Mês -->
+                <!-- Caixa de Aniversariantes -->
                 <div class="bg-charcoal-900 border border-brandGray rounded-xl p-6">
                     <div class="flex justify-between items-center border-b border-brandGray/30 pb-4 mb-4">
-                        <h3 class="font-serif text-xl text-white">Aniversários de Clientes</h3>
-                        <i data-lucide="cake" class="text-gold-400 h-5 w-5"></i>
+                        <h3 class="font-serif text-xl text-white">Próximos Aniversariantes</h3>
+                        <button onclick="showAddBirthdayForm()" class="text-gold-400 hover:text-gold-300 transition-colors"><i data-lucide="plus-circle" class="h-5 w-5"></i></button>
                     </div>
-                    <div id="manager-birthdays-list" class="space-y-3 mb-4">
-                        <!-- Preenchido dinamicamente -->
+                    <div id="add-birthday-form" class="hidden space-y-3 mb-4">
+                        <input type="text" id="new-birthday-name" placeholder="Nome do Cliente" class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                        <input type="text" id="new-birthday-day" placeholder="Dia (Ex: 12 de Outubro)" class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                        <input type="text" id="new-birthday-phone" placeholder="Telefone (Opcional)" class="w-full p-2.5 bg-charcoal-950 border border-brandGray rounded-lg text-white text-sm">
+                        <button onclick="addBirthday()" class="w-full py-2.5 bg-gold-500 text-black font-bold rounded-lg text-xs uppercase tracking-wider">Adicionar Aniversariante</button>
                     </div>
-                    <div class="flex justify-end border-t border-brandGray/20 pt-4">
-                        <button onclick="showAddBirthdayForm()" class="text-xs text-gold-400 font-semibold flex items-center gap-1 hover:underline">
-                            <i data-lucide="plus" class="h-3.5 w-3.5"></i> Novo Aniversariante
-                        </button>
-                    </div>
-                    <div id="add-birthday-form" class="hidden mt-4 p-4 bg-charcoal-950 border border-brandGray rounded-lg space-y-3">
-                        <input type="text" id="new-birthday-name" placeholder="Nome Completo" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
-                        <input type="text" id="new-birthday-day" placeholder="Dia (ex: 12 de Outubro)" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
-                        <input type="text" id="new-birthday-phone" placeholder="Número de Telefone" class="w-full p-2.5 bg-charcoal-900 text-sm rounded border border-brandGray text-white">
-                        <button onclick="addBirthday()" class="w-full bg-gold-500 text-black font-bold p-2.5 rounded-lg text-xs uppercase tracking-wider">
-                            Salvar Novo
-                        </button>
+                    <div class="space-y-4" id="manager-birthdays-list">
+                        <!-- Gerado dinamicamente -->
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 4. MODAL DE AUTENTICAÇÃO -->
-    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-950/80 modal-blur transition-all">
-        <div class="relative w-full max-w-md bg-charcoal-900 rounded-2xl border border-brandGray p-8 space-y-6 shadow-2xl">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:bg-charcoal-800">
-                <i data-lucide="x" class="h-5 w-5"></i>
-            </button>
-            <div class="text-center space-y-2">
-                <img src="https://raw.githubusercontent.com/AiltonRock22/clinica-est-tica/refs/heads/main/logo256.png" alt="Estefani Logo" class="h-16 w-16 mx-auto object-contain">
-                <h3 class="font-serif text-2xl text-white" id="auth-modal-title">Acesso Seguro</h3>
-                <p class="text-xs text-slate-400">Insira os seus dados de acesso.</p>
-            </div>
-
-            <!-- Formulário de Login -->
+    <!-- MODAL DE AUTENTICAÇÃO -->
+    <div id="auth-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 modal-blur">
+        <div class="bg-charcoal-900 border border-brandGray rounded-xl p-8 w-full max-w-md space-y-6 relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"><i data-lucide="x" class="h-6 w-6"></i></button>
+            <h2 id="auth-modal-title" class="font-serif text-3xl text-white text-center">Área Restrita</h2>
             <form id="auth-form" class="space-y-4">
                 <input type="hidden" id="auth-role" value="cliente">
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Endereço de E-mail</label>
-                    <input type="email" id="auth-email" required class="w-full px-4 py-3 bg-charcoal-950 border border-brandGray rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-transparent outline-none transition-all text-white text-sm">
+                    <label for="auth-email" class="block text-sm font-medium text-slate-300 mb-2">E-mail</label>
+                    <input type="email" id="auth-email" placeholder="o-seu-email@exemplo.com" required class="w-full p-3 rounded-lg bg-charcoal-950 border border-brandGray text-white focus:border-gold-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1.5">Palavra-passe</label>
-                    <input type="password" id="auth-password" required class="w-full px-4 py-3 bg-charcoal-950 border border-brandGray rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-transparent outline-none transition-all text-white text-sm">
+                    <label for="auth-password" class="block text-sm font-medium text-slate-300 mb-2">Senha</label>
+                    <input type="password" id="auth-password" placeholder="********" required class="w-full p-3 rounded-lg bg-charcoal-950 border border-brandGray text-white focus:border-gold-500 outline-none">
                 </div>
                 <div class="p-4 rounded-xl bg-gold-950/20 border border-gold-500/10 text-xs text-gold-300 space-y-1">
                     <span class="font-bold">Acesso rápido (Demo):</span>
@@ -521,6 +510,8 @@
 
     <!-- ETAPA 1: DECLARAÇÃO SÍNCRONA DE FUNÇÕES GLOBAIS DE UI -->
     <script>
+        let appState = { appointments: [], inventory: [], sales: [], birthdays: [], services: [], currentUser: null };
+
         window.calculateBudget = () => {
             const checkboxes = document.querySelectorAll('.simulator-checkbox');
             let total = 0;
@@ -648,337 +639,6 @@
                 window.showToast("Aguarde...", "A carregar gerador de relatórios PDF.", true);
             }
         };
-    </script>
-
-    <!-- ETAPA 2: CARREGAMENTO DO SDK DO FIREBASE E HIDRATAÇÃO EM TEMPO REAL -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
-
-        // Credenciais do teu Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyD20OPUFet_4C_s2o-AM5S2ckYYy-S1ga4",
-            authDomain: "esteticistaestefani.firebaseapp.com",
-            projectId: "esteticistaestefani",
-            storageBucket: "esteticistaestefani.firebasestorage.app",
-            messagingSenderId: "196912865507",
-            appId: "1:196912865507:web:f89be4219b5f89cb4c25d6",
-            measurementId: "G-HL857XX51P"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const APP_ID = 'esteticistaestefani';
-
-        // Referências das coleções do Firestore
-        const getCol = (name) => collection(db, 'artifacts', APP_ID, 'public', 'data', name);
-        let appState = { appointments: [], inventory: [], sales: [], birthdays: [], services: [], currentUser: null };
-        let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null, services: null };
-
-        // Subscrever e hidratar as delegações síncronas
-        window.firebaseLogout = async () => { 
-            await signOut(auth); 
-            window.showToast("Sessão Terminada", "Até breve!"); 
-            window.switchView('landing'); 
-        };
-
-        window.firebaseConfirmAppointment = async (id) => { 
-            try {
-                await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
-                window.showToast("Confirmado", "Agendamento aprovado com sucesso."); 
-            } catch (err) {
-                console.error(err);
-                window.showToast("Erro", "Falha ao aprovar o agendamento.", true);
-            }
-        };
-        
-        window.firebaseReorderProduct = async (id) => { 
-            const productRef = doc(getCol('inventory'), id); 
-            const product = appState.inventory.find(p => p.id === id); 
-            if (product) { 
-                await updateDoc(productRef, { stock: product.stock + 5 }); 
-                window.showToast("Stock atualizado", `${product.name}: +5 unidades.`); 
-            } 
-        };
-
-        window.firebaseAddBirthday = async () => {
-            const name = document.getElementById('new-birthday-name').value;
-            const day = document.getElementById('new-birthday-day').value;
-            const phone = document.getElementById('new-birthday-phone').value;
-            
-            if (name && day) { 
-                await addDoc(getCol('birthdays'), { name, day, phone }); 
-                window.showToast("Adicionado", `${name} foi inserido com sucesso.`); 
-                document.getElementById('add-birthday-form').classList.add('hidden');
-                document.getElementById('new-birthday-name').value = '';
-                document.getElementById('new-birthday-day').value = '';
-                document.getElementById('new-birthday-phone').value = '';
-            }
-        };
-
-        window.firebaseGenerateAnnualPDF = async () => {
-            const { jsPDF } = window.jspdf;
-            const docPdf = new jsPDF();
-            
-            docPdf.setFillColor(18, 18, 18); 
-            docPdf.rect(0, 0, 210, 45, 'F');
-            
-            docPdf.setTextColor(255, 255, 255); 
-            docPdf.setFont('times', 'bold'); 
-            docPdf.setFontSize(22); 
-            docPdf.text("ESTETICA ESTEFANI FERREIRA", 15, 22);
-            
-            docPdf.setFontSize(10); 
-            docPdf.setTextColor(197, 139, 43); 
-            docPdf.text("RELATÓRIO FINANCEIRO GERENCIAL", 15, 29);
-            
-            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
-            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
-            
-            docPdf.setTextColor(0, 0, 0); 
-            docPdf.setFontSize(12); 
-            docPdf.text(`Total Faturado: ${(apptTotal + salesTotal).toFixed(2)} €`, 15, 60);
-            
-            docPdf.text("Serviços Confirmados:", 15, 80);
-            let y = 90;
-            appState.appointments.filter(a => a.status === 'Confirmado').forEach(a => { 
-                docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`, 15, y); 
-                y += 8; 
-            });
-            
-            docPdf.text("Vendas de Balcão:", 15, y + 5);
-            y += 15;
-            appState.sales.forEach(s => { 
-                docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`, 15, y); 
-                y += 8; 
-            });
-            
-            docPdf.save("Relatorio_Estefani_Ferreira.pdf");
-            window.showToast("PDF Gerado", "O balanço financeiro anual foi descarregado.");
-        };
-
-        // Listeners em tempo real ligados ao Firestore
-        function setupRealtimeListeners() {
-            if (unsubscribe.appointments) unsubscribe.appointments();
-            unsubscribe.appointments = onSnapshot(getCol('appointments'), (snap) => { 
-                appState.appointments = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
-                else if (appState.currentUser?.role === 'client') renderClientPortal(); 
-            });
-            
-            if (unsubscribe.inventory) unsubscribe.inventory();
-            unsubscribe.inventory = onSnapshot(getCol('inventory'), (snap) => { 
-                appState.inventory = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
-            });
-            
-            if (unsubscribe.sales) unsubscribe.sales();
-            unsubscribe.sales = onSnapshot(getCol('sales'), (snap) => { 
-                appState.sales = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
-            });
-            
-            if (unsubscribe.birthdays) unsubscribe.birthdays();
-            unsubscribe.birthdays = onSnapshot(getCol('birthdays'), (snap) => { 
-                appState.birthdays = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
-            });
-
-            if (unsubscribe.services) unsubscribe.services();
-            unsubscribe.services = onSnapshot(getCol('services'), (snap) => { 
-                appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-                renderLandingServices();
-                renderBudgetCalculator();
-                updateClientServicesDropdown();
-            });
-        }
-
-        // Submissão do Login
-        document.getElementById('auth-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('auth-email').value;
-            const password = document.getElementById('auth-password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                window.showToast("Bem-vindo(a)", "Login efetuado com sucesso.");
-                window.closeAuthModal();
-            } catch (err) { 
-                window.showToast("Erro", "Credenciais inválidas.", true); 
-            }
-        });
-
-        // Verificação contínua do estado da conta
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const isManager = (user.email === 'estefanifs@hotmail.com.br');
-                appState.currentUser = { 
-                    uid: user.uid, 
-                    email: user.email, 
-                    name: isManager ? 'Estefani Ferreira' : (user.displayName || 'Cliente'), 
-                    role: isManager ? 'manager' : 'client' 
-                };
-                setupRealtimeListeners();
-                
-                // Seed de Produtos iniciais se o banco de dados estiver vazio
-                const invSnap = await getDocs(getCol('inventory'));
-                if (invSnap.empty) {
-                    await addDoc(getCol('inventory'), { name: "Creme Facial Rejuvenescedor", stock: 12, price: 45, minStock: 5 });
-                    await addDoc(getCol('inventory'), { name: "Sérum Ácido Hialurónico", stock: 3, price: 55, minStock: 5 });
-                    await addDoc(getCol('inventory'), { name: "Máscara Purificante Algas", stock: 20, price: 35, minStock: 4 });
-                }
-
-                // Seed de Serviços iniciais se o banco de dados estiver vazio
-                const srvSnap = await getDocs(getCol('services'));
-                if (srvSnap.empty) {
-                    await addDoc(getCol('services'), { name: "Limpeza de Pele Profunda", price: 60, duration: 60, desc: "Remoção completa de impurezas com vapor de ozono." });
-                    await addDoc(getCol('services'), { name: "Peeling Químico Revitalizante", price: 90, duration: 45, desc: "Tratamento para manchas e renovação celular profunda." });
-                    await addDoc(getCol('services'), { name: "Massagem Modeladora Premium", price: 80, duration: 75, desc: "Massagem modeladora de silhueta corporal com óleos ativos." });
-                }
-                
-                // Seed de aniversariantes se vazio
-                const bdaySnap = await getDocs(getCol('birthdays'));
-                if (bdaySnap.empty) {
-                    await addDoc(getCol('birthdays'), { name: "Ana Oliveira", day: "12 de Outubro", phone: "+351 912 345 678" });
-                    await addDoc(getCol('birthdays'), { name: "Catarina Silva", day: "15 de Outubro", phone: "+351 934 888 221" });
-                }
-                
-                window.switchView(appState.currentUser.role === 'manager' ? 'gerente' : 'cliente');
-            } else {
-                appState.currentUser = null;
-                // Ativar escuta básica para carregar serviços mesmo deslogado
-                onSnapshot(getCol('services'), (snap) => {
-                    appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                    renderLandingServices();
-                    renderBudgetCalculator();
-                });
-                
-                if (unsubscribe.appointments) unsubscribe.appointments();
-                if (unsubscribe.inventory) unsubscribe.inventory();
-                if (unsubscribe.sales) unsubscribe.sales();
-                if (unsubscribe.birthdays) unsubscribe.birthdays();
-                window.switchView('landing');
-            }
-        });
-
-        // Agendamento com verificação de colisão e segurança de data passada
-        document.getElementById('appointment-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!appState.currentUser) return;
-            
-            const [serviceName, priceStr] = document.getElementById('appt-service').value.split('|');
-            const price = parseFloat(priceStr);
-            const professional = document.getElementById('appt-professional').value;
-            const date = document.getElementById('appt-date').value;
-            const time = document.getElementById('appt-time').value;
-            
-            if (new Date(date) < new Date().setHours(0,0,0,0)) { 
-                window.showToast("Data inválida", "Não pode agendar no passado.", true); 
-                return; 
-            }
-            
-            // Query segura para evitar colisões
-            const conflictQuery = query(
-                getCol('appointments'), 
-                where('date', '==', date), 
-                where('time', '==', time), 
-                where('professional', '==', professional)
-            );
-            
-            const conflictSnap = await getDocs(conflictQuery);
-            if (!conflictSnap.empty) { 
-                window.showToast("Horário ocupado", "Já existe um agendamento nesse horário.", true); 
-                return; 
-            }
-            
-            await addDoc(getCol('appointments'), { 
-                client: appState.currentUser.name, 
-                email: appState.currentUser.email, 
-                service: serviceName, 
-                date, 
-                time, 
-                professional, 
-                price, 
-                status: "Pendente" 
-            });
-            
-            window.showToast("Sucesso", "Agendamento solicitado. Aguarde confirmação.");
-            document.getElementById('appointment-form').reset();
-            renderClientPortal();
-        });
-
-        // Adicionar novo Serviço/Procedimento ao Firestore
-        document.getElementById('new-service-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('new-service-name').value;
-            const price = parseFloat(document.getElementById('new-service-price').value);
-
-            try {
-                await addDoc(getCol('services'), {
-                    name: name,
-                    price: price,
-                    duration: 60,
-                    desc: "Procedimento estético personalizado."
-                });
-                window.showToast("Serviço Criado", `${name} adicionado com sucesso!`);
-                document.getElementById('new-service-form').reset();
-            } catch (err) {
-                window.showToast("Erro", "Não foi possível guardar o novo serviço.", true);
-            }
-        });
-
-        // Adicionar novo Produto ao Firestore
-        document.getElementById('new-product-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('new-product-name').value;
-            const stock = parseInt(document.getElementById('new-product-stock').value);
-            const price = parseFloat(document.getElementById('new-product-price').value);
-
-            try {
-                await addDoc(getCol('inventory'), {
-                    name: name,
-                    stock: stock,
-                    price: price,
-                    minStock: 5
-                });
-                window.showToast("Produto Guardado", `${name} adicionado ao stock!`);
-                document.getElementById('new-product-form').reset();
-            } catch (err) {
-                window.showToast("Erro", "Não foi possível guardar o produto.", true);
-            }
-        });
-
-        // Venda manual com atualização reativa do stock no Firestore
-        document.getElementById('sale-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const itemId = document.getElementById('sale-item').value;
-            const qty = parseInt(document.getElementById('sale-qty').value);
-            const product = appState.inventory.find(p => p.id === itemId);
-            
-            if (!product) { 
-                window.showToast("Erro", "Produto não encontrado.", true); 
-                return; 
-            }
-            if (product.stock < qty) { 
-                window.showToast("Stock insuficiente", `Apenas restam ${product.stock} unidades.`, true); 
-                return; 
-            }
-            
-            const newStock = product.stock - qty;
-            await updateDoc(doc(getCol('inventory'), product.id), { stock: newStock });
-            await addDoc(getCol('sales'), { 
-                date: new Date().toISOString().split('T')[0], 
-                type: "Produto", 
-                name: product.name, 
-                qty, 
-                total: product.price * qty 
-            });
-            
-            window.showToast("Venda registada", `Total: ${(product.price * qty).toFixed(2)} €`);
-            document.getElementById('sale-form').reset();
-        });
 
         // Renderizadores Dinâmicos baseados no Firestore
         function renderLandingServices() {
@@ -1124,10 +784,369 @@
             });
             lucide.createIcons();
         }
+    </script>
 
-        // Tornar renderizadores visíveis globalmente
-        window.renderManagerDashboard = renderManagerDashboard;
-        window.renderClientPortal = renderClientPortal;
+    <!-- ETAPA 2: CARREGAMENTO DO SDK DO FIREBASE E HIDRATAÇÃO EM TEMPO REAL -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/11.4.1/firebase-firestore.js";
+
+        // Credenciais do teu Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD20OPUFet_4C_s2o-AM5S2ckYYy-S1ga4",
+            authDomain: "esteticistaestefani.firebaseapp.com",
+            projectId: "esteticistaestefani",
+            storageBucket: "esteticistaestefani.firebasestorage.app",
+            messagingSenderId: "196912865507",
+            appId: "1:196912865507:web:f89be4219b5f89cb4c25d6",
+            measurementId: "G-HL857XX51P"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const APP_ID = 'esteticistaestefani';
+
+        // Referências das coleções do Firestore
+        const getCol = (name) => collection(db, 'artifacts', APP_ID, 'public', 'data', name);
+        let unsubscribe = { appointments: null, inventory: null, sales: null, birthdays: null, services: null };
+
+        // Subscrever e hidratar as delegações síncronas
+        window.firebaseLogout = async () => { 
+            await signOut(auth); 
+            window.showToast("Sessão Terminada", "Até breve!"); 
+            window.switchView('landing'); 
+            updateHeaderForAuth(null); // Atualiza o cabeçalho após logout
+        };
+
+        window.firebaseConfirmAppointment = async (id) => { 
+            try {
+                await updateDoc(doc(getCol('appointments'), id), { status: "Confirmado" }); 
+                window.showToast("Confirmado", "Agendamento aprovado com sucesso."); 
+            } catch (err) {
+                console.error(err);
+                window.showToast("Erro", "Falha ao aprovar o agendamento.", true);
+            }
+        };
+        
+        window.firebaseReorderProduct = async (id) => { 
+            const productRef = doc(getCol('inventory'), id); 
+            const product = appState.inventory.find(p => p.id === id); 
+            if (product) { 
+                await updateDoc(productRef, { stock: product.stock + 5 }); 
+                window.showToast("Stock atualizado", `${product.name}: +5 unidades.`); 
+            } 
+        };
+
+        window.firebaseAddBirthday = async () => {
+            const name = document.getElementById('new-birthday-name').value;
+            const day = document.getElementById('new-birthday-day').value;
+            const phone = document.getElementById('new-birthday-phone').value;
+            
+            if (name && day) { 
+                await addDoc(getCol('birthdays'), { name, day, phone }); 
+                window.showToast("Adicionado", `${name} foi inserido com sucesso.`); 
+                document.getElementById('add-birthday-form').classList.add('hidden');
+                document.getElementById('new-birthday-name').value = '';
+                document.getElementById('new-birthday-day').value = '';
+                document.getElementById('new-birthday-phone').value = '';
+            }
+        };
+
+        window.firebaseGenerateAnnualPDF = async () => {
+            const { jsPDF } = window.jspdf;
+            const docPdf = new jsPDF();
+            
+            docPdf.setFillColor(18, 18, 18); 
+            docPdf.rect(0, 0, 210, 45, 'F');
+            
+            docPdf.setTextColor(255, 255, 255); 
+            docPdf.setFont('times', 'bold'); 
+            docPdf.setFontSize(22); 
+            docPdf.text("ESTETICA ESTEFANI FERREIRA", 15, 22);
+            
+            docPdf.setFontSize(10); 
+            docPdf.setTextColor(197, 139, 43); 
+            docPdf.text("RELATÓRIO FINANCEIRO GERENCIAL", 15, 29);
+            
+            const apptTotal = appState.appointments.filter(a => a.status === 'Confirmado').reduce((s, a) => s + a.price, 0);
+            const salesTotal = appState.sales.reduce((s, a) => s + a.total, 0);
+            
+            docPdf.setTextColor(0, 0, 0); 
+            docPdf.setFontSize(12); 
+            docPdf.text(`Total Faturado: ${(apptTotal + salesTotal).toFixed(2)} €`, 15, 60);
+            
+            docPdf.text("Serviços Confirmados:", 15, 80);
+            let y = 90;
+            appState.appointments.filter(a => a.status === 'Confirmado').forEach(a => { 
+                docPdf.text(`${a.date} - ${a.service} - ${a.price.toFixed(2)}€`, 15, y); 
+                y += 8; 
+            });
+            
+            docPdf.text("Vendas de Balcão:", 15, y + 5);
+            y += 15;
+            appState.sales.forEach(s => { 
+                docPdf.text(`${s.date} - ${s.name} x${s.qty} = ${s.total.toFixed(2)}€`, 15, y); 
+                y += 8; 
+            });
+            
+            docPdf.save("Relatorio_Estefani_Ferreira.pdf");
+            window.showToast("PDF Gerado", "O balanço financeiro anual foi descarregado.");
+        };
+
+        // Função para atualizar o cabeçalho com informações do usuário
+        function updateHeaderForAuth(user) {
+            const userInfoDisplay = document.getElementById('user-info-display');
+            const loggedInUsername = document.getElementById('logged-in-username');
+            const authButtons = [
+                document.getElementById('header-client-area-btn'),
+                document.getElementById('header-manager-panel-btn'),
+                document.getElementById('header-schedule-online-btn')
+            ];
+
+            if (user) {
+                loggedInUsername.innerText = user.name;
+                userInfoDisplay.classList.remove('hidden');
+                userInfoDisplay.classList.add('flex');
+                authButtons.forEach(btn => btn.classList.add('hidden'));
+            } else {
+                userInfoDisplay.classList.add('hidden');
+                userInfoDisplay.classList.remove('flex');
+                authButtons.forEach(btn => btn.classList.remove('hidden'));
+            }
+        }
+
+        // Listeners em tempo real ligados ao Firestore
+        function setupRealtimeListeners() {
+            // Desinscrever listeners anteriores para evitar duplicação
+            Object.values(unsubscribe).forEach(unsub => { if (unsub) unsub(); });
+
+            unsubscribe.appointments = onSnapshot(getCol('appointments'), (snap) => { 
+                appState.appointments = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+                else if (appState.currentUser?.role === 'client') renderClientPortal(); 
+            });
+            
+            unsubscribe.inventory = onSnapshot(getCol('inventory'), (snap) => { 
+                appState.inventory = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+            
+            unsubscribe.sales = onSnapshot(getCol('sales'), (snap) => { 
+                appState.sales = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+            
+            unsubscribe.birthdays = onSnapshot(getCol('birthdays'), (snap) => { 
+                appState.birthdays = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                if (appState.currentUser?.role === 'manager') renderManagerDashboard(); 
+            });
+
+            unsubscribe.services = onSnapshot(getCol('services'), (snap) => { 
+                appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                renderLandingServices();
+                renderBudgetCalculator();
+                updateClientServicesDropdown();
+            });
+        }
+
+        // Submissão do Login
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                window.showToast("Bem-vindo(a)", "Login efetuado com sucesso.");
+                window.closeAuthModal();
+                // onAuthStateChanged irá lidar com a atualização da UI
+            } catch (err) { 
+                window.showToast("Erro", "Credenciais inválidas.", true); 
+            }
+        });
+
+        // Verificação contínua do estado da conta
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const isManager = (user.email === 'estefanifs@hotmail.com.br');
+                appState.currentUser = { 
+                    uid: user.uid, 
+                    email: user.email, 
+                    name: isManager ? 'Estefani Ferreira' : (user.displayName || 'Cliente'), 
+                    role: isManager ? 'manager' : 'client' 
+                };
+                updateHeaderForAuth(appState.currentUser); // Atualiza o cabeçalho com o nome do usuário
+                setupRealtimeListeners();
+                
+                // Seed de Produtos iniciais se o banco de dados estiver vazio
+                const invSnap = await getDocs(getCol('inventory'));
+                if (invSnap.empty) {
+                    await addDoc(getCol('inventory'), { name: "Creme Facial Rejuvenescedor", stock: 12, price: 45, minStock: 5 });
+                    await addDoc(getCol('inventory'), { name: "Sérum Ácido Hialurónico", stock: 3, price: 55, minStock: 5 });
+                    await addDoc(getCol('inventory'), { name: "Máscara Purificante Algas", stock: 20, price: 35, minStock: 4 });
+                }
+
+                // Seed de Serviços iniciais se o banco de dados estiver vazio
+                const srvSnap = await getDocs(getCol('services'));
+                if (srvSnap.empty) {
+                    await addDoc(getCol('services'), { name: "Limpeza de Pele Profunda", price: 60, duration: 60, desc: "Remoção completa de impurezas com vapor de ozono." });
+                    await addDoc(getCol('services'), { name: "Peeling Químico Revitalizante", price: 90, duration: 45, desc: "Tratamento para manchas e renovação celular profunda." });
+                    await addDoc(getCol('services'), { name: "Massagem Modeladora Premium", price: 80, duration: 75, desc: "Massagem modeladora de silhueta corporal com óleos ativos." });
+                }
+                
+                // Seed de aniversariantes se vazio
+                const bdaySnap = await getDocs(getCol('birthdays'));
+                if (bdaySnap.empty) {
+                    await addDoc(getCol('birthdays'), { name: "Ana Oliveira", day: "12 de Outubro", phone: "+351 912 345 678" });
+                    await addDoc(getCol('birthdays'), { name: "Catarina Silva", day: "15 de Outubro", phone: "+351 934 888 221" });
+                }
+                
+                window.switchView(appState.currentUser.role === 'manager' ? 'gerente' : 'cliente');
+            } else {
+                appState.currentUser = null;
+                updateHeaderForAuth(null); // Atualiza o cabeçalho para estado deslogado
+                // Ativar escuta básica para carregar serviços mesmo deslogado
+                onSnapshot(getCol('services'), (snap) => {
+                    appState.services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    renderLandingServices();
+                    renderBudgetCalculator();
+                });
+                
+                // Desinscrever listeners específicos de usuário
+                if (unsubscribe.appointments) unsubscribe.appointments();
+                if (unsubscribe.inventory) unsubscribe.inventory();
+                if (unsubscribe.sales) unsubscribe.sales();
+                if (unsubscribe.birthdays) unsubscribe.birthdays();
+                window.switchView('landing');
+            }
+        });
+
+        // Agendamento com verificação de colisão e segurança de data passada
+        document.getElementById('appointment-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!appState.currentUser) return;
+            
+            const [serviceName, priceStr] = document.getElementById('appt-service').value.split('|');
+            const price = parseFloat(priceStr);
+            const professional = document.getElementById('appt-professional').value;
+            const date = document.getElementById('appt-date').value;
+            const time = document.getElementById('appt-time').value;
+            
+            if (new Date(date) < new Date().setHours(0,0,0,0)) { 
+                window.showToast("Data inválida", "Não pode agendar no passado.", true); 
+                return; 
+            }
+            
+            // Query segura para evitar colisões
+            const conflictQuery = query(
+                getCol('appointments'), 
+                where('date', '==', date), 
+                where('time', '==', time), 
+                where('professional', '==', professional)
+            );
+            
+            const conflictSnap = await getDocs(conflictQuery);
+            if (!conflictSnap.empty) { 
+                window.showToast("Horário ocupado", "Já existe um agendamento nesse horário.", true); 
+                return; 
+            }
+            
+            await addDoc(getCol('appointments'), { 
+                client: appState.currentUser.name, 
+                email: appState.currentUser.email, 
+                service: serviceName, 
+                date, 
+                time, 
+                professional, 
+                price, 
+                status: "Pendente" 
+            });
+            
+            window.showToast("Sucesso", "Agendamento solicitado. Aguarde confirmação.");
+            document.getElementById('appointment-form').reset();
+            renderClientPortal();
+        });
+
+        // Adicionar novo Serviço/Procedimento ao Firestore
+        document.getElementById('new-service-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-service-name').value;
+            const price = parseFloat(document.getElementById('new-service-price').value);
+
+            try {
+                await addDoc(getCol('services'), {
+                    name: name,
+                    price: price,
+                    duration: 60,
+                    desc: "Procedimento estético personalizado."
+                });
+                window.showToast("Serviço Criado", `${name} adicionado com sucesso!`);
+                document.getElementById('new-service-form').reset();
+            } catch (err) {
+                window.showToast("Erro", "Não foi possível guardar o novo serviço.", true);
+            }
+        });
+
+        // Adicionar novo Produto ao Firestore
+        document.getElementById('new-product-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-product-name').value;
+            const stock = parseInt(document.getElementById('new-product-stock').value);
+            const price = parseFloat(document.getElementById('new-product-price').value);
+
+            try {
+                await addDoc(getCol('inventory'), {
+                    name: name,
+                    stock: stock,
+                    price: price,
+                    minStock: 5
+                });
+                window.showToast("Produto Guardado", `${name} adicionado ao stock!`);
+                document.getElementById('new-product-form').reset();
+            } catch (err) {
+                window.showToast("Erro", "Não foi possível guardar o produto.", true);
+            }
+        });
+
+        // Venda manual com atualização reativa do stock no Firestore
+        document.getElementById('sale-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const itemId = document.getElementById('sale-item').value;
+            const qty = parseInt(document.getElementById('sale-qty').value);
+            const product = appState.inventory.find(p => p.id === itemId);
+            
+            if (!product) { 
+                window.showToast("Erro", "Produto não encontrado.", true); 
+                return; 
+            }
+            if (product.stock < qty) { 
+                window.showToast("Stock insuficiente", `Apenas restam ${product.stock} unidades.`, true); 
+                return; 
+            }
+            
+            const newStock = product.stock - qty;
+            await updateDoc(doc(getCol('inventory'), product.id), { stock: newStock });
+            await addDoc(getCol('sales'), { 
+                date: new Date().toISOString().split('T')[0], 
+                type: "Produto", 
+                name: product.name, 
+                qty, 
+                total: product.price * qty 
+            });
+            
+            window.showToast("Venda registada", `Total: ${(product.price * qty).toFixed(2)} €`);
+            document.getElementById('sale-form').reset();
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            // A verificação de autenticação do Firebase (onAuthStateChanged) cuidará da exibição inicial da view.
+            // Não chame switchView('landing') aqui para evitar um flash de conteúdo antes da autenticação ser verificada.
+        });
+
     </script>
 </body>
 </html>
